@@ -1,2 +1,2 @@
-# AI_Dionysius
- Artificial Intelligence project done during the 3rd year of Game Development Bachelor's Degree using Unity.
+# AI_Tanks_Exercise
+Exercise from the Artificial Inteligence subject from my bachelor's degree.
