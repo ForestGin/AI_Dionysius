@@ -120,6 +120,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!82 &227055087 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8801932895721469098, guid: bcc8f30e4e3593f47ac3dd0d7bfee31c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8801932895947399493}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &227087100 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8801932895721370553, guid: bcc8f30e4e3593f47ac3dd0d7bfee31c,
@@ -141,9 +147,9 @@ MonoBehaviour:
   m_PlayerNumber: 1
   m_Speed: 12
   m_TurnSpeed: 180
-  m_MovementAudio: {fileID: 0}
-  m_EngineIdling: {fileID: 0}
-  m_EngineDriving: {fileID: 0}
+  m_MovementAudio: {fileID: 227055087}
+  m_EngineIdling: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
+  m_EngineDriving: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
   m_PitchRange: 0.2
 --- !u!4 &227446556 stripped
 Transform:

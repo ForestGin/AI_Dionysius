@@ -63,7 +63,7 @@ public class TankMovement : MonoBehaviour
     {
         // Play the correct audio clip based on whether or not the tank is moving and what audio is currently playing.
 
-        if (Mathf.Abs (m_MovementInputValue) < 0.1f && Mathf.Abs (m_TurnInputValue < 0.1f))
+        if (Mathf.Abs (m_MovementInputValue) < 0.1f && Mathf.Abs (m_TurnInputValue) < 0.1f)
         {
             if (m_MovementAudio.clip == m_EngineDriving)
             {
