@@ -11,14 +11,16 @@ public class GameManager : MonoBehaviour
     public CameraControl m_CameraControl;   
     public Text m_MessageText;              
     public GameObject m_TankPrefab;         
-    public TankManager[] m_Tanks;           
+    public TankManager[] m_Tanks;
+
+    public Vector3[] m_TanksPosition;
 
 
     private int m_RoundNumber;              
     private WaitForSeconds m_StartWait;     
     private WaitForSeconds m_EndWait;       
     private TankManager m_RoundWinner;
-    private TankManager m_GameWinner;       
+    private TankManager m_GameWinner;  
 
 
     private void Start()
@@ -26,10 +28,19 @@ public class GameManager : MonoBehaviour
         m_StartWait = new WaitForSeconds(m_StartDelay);
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
+        //Initializing the position array with the number of tanks
+        m_TanksPosition = new Vector3[m_Tanks.Length];
+
         SpawnAllTanks();
+        GetTanksPosition();
         SetCameraTargets();
 
         StartCoroutine(GameLoop());
+    }
+
+    private void Update()
+    {
+        GetTanksPosition();
     }
 
 
@@ -37,13 +48,22 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
+            m_Tanks[i].m_Instance = Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
             m_Tanks[i].m_PlayerNumber = i + 1;
+
             m_Tanks[i].Setup();
         }
     }
 
+    private void GetTanksPosition()
+    {
+        for (int i = 0; i < m_Tanks.Length; i++)
+        {
+            //Fill array of vec3 positions for every tank (m_PlayerNumber - i)
+            m_TanksPosition[i] = m_Tanks[i].m_Instance.transform.position;
+
+        }
+    }
 
     private void SetCameraTargets()
     {

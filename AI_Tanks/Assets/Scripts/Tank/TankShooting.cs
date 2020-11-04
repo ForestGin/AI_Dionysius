@@ -13,6 +13,7 @@ public class TankShooting : MonoBehaviour
     public float m_MinLaunchForce = 15f; //this should be constant                          
     public float m_MaxLaunchForce = 30f; //and be controlled via parabola
     public float m_MaxChargeTime = 0.75f;
+    public GameManager m_manager;
 
     
     private string m_FireButton;         

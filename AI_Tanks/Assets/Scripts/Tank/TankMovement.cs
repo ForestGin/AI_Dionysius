@@ -16,8 +16,11 @@ public class TankMovement : MonoBehaviour
     private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
-    private float m_OriginalPitch;         
+    private float m_OriginalPitch;
 
+    //------------------------------------------------------------
+    private GameManager m_GameManager;
+    [HideInInspector] public GameObject m_Instance;
 
     private void Awake()
     {
@@ -55,9 +58,14 @@ public class TankMovement : MonoBehaviour
         m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
         m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
+        //SetTankPositionInArray();
         EngineAudio ();
     }
 
+    //void SetTankPositionInArray()
+    //{
+    //    m_GameManager.m_TanksPosition[m_PlayerNumber - 1] = 
+    //}
 
     private void EngineAudio()
     {
