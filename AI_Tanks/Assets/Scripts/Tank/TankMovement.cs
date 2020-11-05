@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
+using Unity.UNetWeaver;
+using System.Dynamic;
 
 public class TankMovement : MonoBehaviour
 {
@@ -19,8 +22,13 @@ public class TankMovement : MonoBehaviour
     private float m_OriginalPitch;
 
     //------------------------------------------------------------
-    private GameManager m_GameManager;
-    [HideInInspector] public GameObject m_Instance;
+    private GameManager m_ManagerScript;
+    //public Vector3 m_MyTankPosition;
+    public Vector3 m_ClosestTankPosition;
+
+    private GameObject m_Turret;
+    private Transform m_TankTransform;
+    private Transform m_TurretTransform;
 
     private void Awake()
     {
@@ -44,12 +52,26 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+        m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        m_Turret = gameObject.transform.Find("TankRenderers/TankTurret").gameObject;
+        
+        if (m_Turret != null)
+        {
+            Debug.Log("Turret Child found successfully!");
+        }
+        else
+        {
+            Debug.Log("Turret Child not found!");
+        }
+
+        m_ClosestTankPosition = GetClosestTankPosition();
+
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
 
         m_OriginalPitch = m_MovementAudio.pitch;
     }
-    
 
     private void Update()
     {
@@ -58,14 +80,46 @@ public class TankMovement : MonoBehaviour
         m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
         m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
-        //SetTankPositionInArray();
+        m_ClosestTankPosition = GetClosestTankPosition();
+
+        m_Turret.transform.LookAt(m_ClosestTankPosition);
+
         EngineAudio ();
     }
 
-    //void SetTankPositionInArray()
-    //{
-    //    m_GameManager.m_TanksPosition[m_PlayerNumber - 1] = 
-    //}
+    Vector3 GetClosestTankPosition()
+    {
+        float dist = -1;
+        float mindist = 0;
+
+        Vector3 closest = Vector3.zero;
+
+        for (int i = 0; i < m_ManagerScript.m_Tanks.Length; i++)
+        {
+            //Making sure that the closest tank is not themselves
+            if (i != m_PlayerNumber - 1)
+            {
+                //First iteration
+                if (dist == -1)
+                {
+                    mindist = dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
+                    closest = m_ManagerScript.m_TanksPosition[i];
+                }
+                else
+                {
+                    dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
+
+                    if (dist < mindist)
+                    {
+                        mindist = dist;
+                        closest = m_ManagerScript.m_TanksPosition[i];
+                    }
+                }
+            }  
+        }
+
+        return closest;
+    }
 
     private void EngineAudio()
     {
