@@ -18,7 +18,12 @@ public class TankShooting : MonoBehaviour
     private string m_FireButton;         
     private float m_CurrentLaunchForce = 30f;  
     //private float m_ChargeSpeed;         
-    private bool m_Fired;                
+    private bool m_Fired;   
+    
+    //Parabolic motion shooting
+    public int m_RateOfFire = 1; //per second
+    public bool m_ShootDelay;
+    public float m_ShootingTimer;
 
     private void OnEnable()
     {
@@ -39,10 +44,18 @@ public class TankShooting : MonoBehaviour
     {
         //Fire when enemy is in range
 
+        //Fire Delay
+        if (m_ShootingTimer < Time.time)
+        {
+            m_ShootDelay = false;
+        }
 
-        //Fire();
-        
-
+        if (!m_ShootDelay)
+        {
+            Fire();
+            m_ShootDelay = true;
+            m_ShootingTimer = Time.time + m_RateOfFire;
+        }
     }
 
 
