@@ -6,7 +6,7 @@ using System.Dynamic;
 public class TankMovement : MonoBehaviour
 {
     public int m_PlayerNumber = 1;         
-    public float m_Speed = 12f;            
+    public float m_Speed = 7f;            
     public float m_TurnSpeed = 180f;       
     public AudioSource m_MovementAudio;    
     public AudioClip m_EngineIdling;       
@@ -30,6 +30,13 @@ public class TankMovement : MonoBehaviour
     private Transform m_TankTransform;
     private Transform m_TurretTransform;
 
+    //wander
+    Vector3 wayPoint = new Vector3(0.0f, 0.0f, 0.0f);
+    private float Range = 8f;
+    private float Acceleration = 0.5f;
+    private float Minimum_Speed = 4f;
+    private float Maximum_Speed = 10f;
+
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -52,6 +59,8 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+        Wander();
+
         m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         m_Turret = gameObject.transform.Find("TankRenderers/TankTurret").gameObject;
@@ -75,8 +84,32 @@ public class TankMovement : MonoBehaviour
 
     private void Update()
     {
+        //wander logic and acceleration
+        if (m_PlayerNumber == 2)
+        {
+            if (m_Speed < Maximum_Speed && (transform.position - wayPoint).magnitude > 3)
+            {
+                m_Speed += Acceleration;
+            }
+
+            transform.position += transform.TransformDirection(Vector3.forward) * m_Speed * Time.deltaTime;
+
+
+            if ((transform.position - wayPoint).magnitude < 3 && m_Speed > Minimum_Speed)
+            {
+                m_Speed -= Acceleration;
+
+            }
+
+            if ((transform.position - wayPoint).magnitude < 1)
+            {
+                Wander();
+                m_Speed = Maximum_Speed;
+            }
+        }
+
         // Store the player's input and make sure the audio for the engine is playing.
-       
+
         m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
         m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
@@ -171,5 +204,14 @@ public class TankMovement : MonoBehaviour
         Quaternion turnRotation =  Quaternion.Euler (0f, turn, 0f);
 
         m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
+    }
+
+    private void Wander()
+    {
+
+        wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
+        wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+        transform.LookAt(wayPoint);
+        Debug.Log(wayPoint + " and " + (transform.position - wayPoint).magnitude);
     }
 }
