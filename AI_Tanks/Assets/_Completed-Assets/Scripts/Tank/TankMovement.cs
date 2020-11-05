@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 
 namespace Complete
 {
+
     public class TankMovement : MonoBehaviour
     {
         public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
-        public float m_Speed = 12f;                 // How fast the tank moves forward and back.
+        public float m_Speed = 7f;               // How fast the tank moves forward and back.
         public float m_TurnSpeed = 180f;            // How fast the tank turns in degrees per second.
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
@@ -20,9 +24,18 @@ namespace Complete
         private float m_OriginalPitch;              // The pitch of the audio source at the start of the scene.
         private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
 
+        //wander
+        Vector3 wayPoint = new Vector3(0.0f,0.0f,0.0f);
+        private float Range = 8f;
+        private float Acceleration = 0.5f;
+        private float Minimum_Speed = 4f;
+        private float Maximum_Speed = 10f;
+        
+
         private void Awake ()
         {
             m_Rigidbody = GetComponent<Rigidbody> ();
+      
         }
 
 
@@ -61,6 +74,8 @@ namespace Complete
 
         private void Start ()
         {
+            Wander();
+
             // The axes names are based on player number.
             m_MovementAxisName = "Vertical" + m_PlayerNumber;
             m_TurnAxisName = "Horizontal" + m_PlayerNumber;
@@ -72,6 +87,29 @@ namespace Complete
 
         private void Update ()
         {
+
+            if (m_Speed < Maximum_Speed && (transform.position - wayPoint).magnitude > 3)
+            {
+                m_Speed += Acceleration;
+            }
+            
+            transform.position += transform.TransformDirection(Vector3.forward) *  m_Speed * Time.deltaTime;
+
+
+            if ((transform.position - wayPoint).magnitude < 3 && m_Speed > Minimum_Speed)
+            {
+                m_Speed -= Acceleration;
+
+            }
+
+            if ((transform.position - wayPoint).magnitude < 1)
+            {
+                Wander();
+                m_Speed = Maximum_Speed;
+            }
+
+         
+
             // Store the value of both input axes.
             m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
             m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
@@ -137,5 +175,15 @@ namespace Complete
             // Apply this rotation to the rigidbody's rotation.
             m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
         }
+
+        private void Wander()
+        {
+
+            wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
+            wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+            transform.LookAt(wayPoint);
+            Debug.Log(wayPoint + " and " + (transform.position - wayPoint).magnitude);
+        }
     }
 }
+
