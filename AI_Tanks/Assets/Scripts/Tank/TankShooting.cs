@@ -40,7 +40,7 @@ public class TankShooting : MonoBehaviour
         //Fire when enemy is in range
 
 
-        Fire();
+        //Fire();
         
 
     }
