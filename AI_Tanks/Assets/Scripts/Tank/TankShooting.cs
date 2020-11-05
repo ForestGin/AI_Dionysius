@@ -10,20 +10,18 @@ public class TankShooting : MonoBehaviour
     public AudioSource m_ShootingAudio;  
     //public AudioClip m_ChargingClip;     
     public AudioClip m_FireClip;         
-    //public float m_MinLaunchForce = 15f; //this should be constant                          
-    //public float m_MaxLaunchForce = 30f; //and be controlled via parabola
-    //public float m_MaxChargeTime = 0.75f;
     public GameManager m_manager;
 
     private string m_FireButton;         
-    private float m_CurrentLaunchForce = 30f;  
-    //private float m_ChargeSpeed;         
-    private bool m_Fired;   
+    private float m_CurrentLaunchForce = 30f;          
     
     //Parabolic motion shooting
     public int m_RateOfFire = 1; //per second
     public bool m_ShootDelay;
     public float m_ShootingTimer;
+    
+    public float m_MaxRange;
+    public float m_ShootingAngle;
 
     private void OnEnable()
     {
@@ -62,9 +60,6 @@ public class TankShooting : MonoBehaviour
     private void Fire()
     {
         // Instantiate and launch the shell.
-
-        m_Fired = true;
-
         Rigidbody shellInstance = Instantiate(m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
