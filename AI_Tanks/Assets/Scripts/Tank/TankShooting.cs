@@ -50,7 +50,7 @@ public class TankShooting : MonoBehaviour
 
         if (!m_ShootDelay)
         {
-            Fire();
+            //Fire();
             m_ShootDelay = true;
             m_ShootingTimer = Time.time + m_RateOfFire;
         }

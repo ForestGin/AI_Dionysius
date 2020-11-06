@@ -2,6 +2,8 @@
 using System.Collections;
 using Unity.UNetWeaver;
 using System.Dynamic;
+using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class TankMovement : MonoBehaviour
 {
@@ -32,10 +34,13 @@ public class TankMovement : MonoBehaviour
 
     //wander
     Vector3 wayPoint = new Vector3(0.0f, 0.0f, 0.0f);
-    private float Range = 8f;
-    private float Acceleration = 0.5f;
-    private float Minimum_Speed = 4f;
-    private float Maximum_Speed = 10f;
+    private float Range = 20f;
+    //private float Acceleration = 0.5f;
+    //private float Minimum_Speed = 4f;
+    //private float Maximum_Speed = 10f;
+    private NavMeshAgent Tank;
+    private NavMeshPath path;
+    private bool walkable = true;
 
     private void Awake()
     {
@@ -59,7 +64,11 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-        Wander();
+        path = new NavMeshPath();
+        Tank = GetComponent<NavMeshAgent>();
+        if (m_PlayerNumber == 2)
+            Wander();
+        
 
         m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
 
@@ -87,31 +96,31 @@ public class TankMovement : MonoBehaviour
         //wander logic and acceleration
         if (m_PlayerNumber == 2)
         {
-            if (m_Speed < Maximum_Speed && (transform.position - wayPoint).magnitude > 3)
-            {
-                m_Speed += Acceleration;
-            }
+            //if (m_Speed < Maximum_Speed && (transform.position - wayPoint).magnitude > 3)
+            //{
+            //    m_Speed += Acceleration;
+            //}
 
-            transform.position += transform.TransformDirection(Vector3.forward) * m_Speed * Time.deltaTime;
+            //transform.position += transform.TransformDirection(Vector3.forward) * m_Speed * Time.deltaTime;
 
 
-            if ((transform.position - wayPoint).magnitude < 3 && m_Speed > Minimum_Speed)
-            {
-                m_Speed -= Acceleration;
+            //if ((transform.position - wayPoint).magnitude < 3 && m_Speed > Minimum_Speed)
+            //{
+            //    m_Speed -= Acceleration;
 
-            }
+            //}
 
-            if ((transform.position - wayPoint).magnitude < 1)
+            if ((transform.position - Tank.destination).magnitude < Tank.stoppingDistance)
             {
                 Wander();
-                m_Speed = Maximum_Speed;
+                //tankAgent.speed = Maximum_Speed;
             }
         }
 
         // Store the player's input and make sure the audio for the engine is playing.
 
-        m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
-        m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
+        //m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
+        //m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
         m_ClosestTankPosition = GetClosestTankPosition();
 
@@ -208,10 +217,17 @@ public class TankMovement : MonoBehaviour
 
     private void Wander()
     {
-
+       
         wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
         wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
         transform.LookAt(wayPoint);
-        Debug.Log(wayPoint + " and " + (transform.position - wayPoint).magnitude);
+
+        Tank.destination = wayPoint;
+        walkable = Tank.CalculatePath(Tank.destination, path);//returns true if path is find
+
+        Debug.Log(walkable);
+        Debug.Log(path.status);
+        Debug.Log(wayPoint /*+ " and " + (transform.position - wayPoint).magnitude*/);
+        
     }
 }
