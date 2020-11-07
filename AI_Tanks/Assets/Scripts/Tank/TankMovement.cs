@@ -35,9 +35,6 @@ public class TankMovement : MonoBehaviour
     //wander
     Vector3 wayPoint = new Vector3(0.0f, 0.0f, 0.0f);
     private float Range = 20f;
-    //private float Acceleration = 0.5f;
-    //private float Minimum_Speed = 4f;
-    //private float Maximum_Speed = 10f;
     private NavMeshAgent Tank;
     private NavMeshPath path;
     private bool walkable = true;
@@ -52,6 +49,8 @@ public class TankMovement : MonoBehaviour
     private GameObject Points;  
     private int destPoint = 0;
     Vector3 wayPoint2 = new Vector3(0.0f, 0.0f, 0.0f);
+    private float breakforce = 0.25f;
+    private float speed = 3.5f;
 
     private void Awake()
     {
@@ -133,31 +132,29 @@ public class TankMovement : MonoBehaviour
         //wander logic and acceleration
         if (m_PlayerNumber == 2)
         {
-            //if (m_Speed < Maximum_Speed && (transform.position - wayPoint).magnitude > 3)
-            //{
-            //    m_Speed += Acceleration;
-            //}
-
-            //transform.position += transform.TransformDirection(Vector3.forward) * m_Speed * Time.deltaTime;
-
-
-            //if ((transform.position - wayPoint).magnitude < 3 && m_Speed > Minimum_Speed)
-            //{
-            //    m_Speed -= Acceleration;
-
-            //}
-
+           
             if ((transform.position - Tank.destination).magnitude < Tank.stoppingDistance)
             {
+                Tank.speed -= breakforce;
+            }
+
+            if ((transform.position - Tank.destination).magnitude < (Tank.stoppingDistance - 2f))
+            {
                 Wander();
-                //tankAgent.speed = Maximum_Speed;
+                Tank.speed = speed;
             }
         }
 
         if (m_PlayerNumber == 1)
         {
+            if (!Tank.pathPending && Tank.remainingDistance < 3f)
+                Tank.speed -= breakforce;
+
             if (!Tank.pathPending && Tank.remainingDistance < 1f)
+            {
                 Patrol();
+                Tank.speed = speed;
+            }
         }
 
             // Store the player's input and make sure the audio for the engine is playing.
@@ -260,10 +257,10 @@ public class TankMovement : MonoBehaviour
 
     private void Wander()
     {
-
+        Tank.angularSpeed = 200f;
         wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
         wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
-        transform.LookAt(wayPoint);
+        //transform.LookAt(wayPoint);
 
         if (wayPoint.x > LeftFrontier.position.x && wayPoint.x < RightFrontier.position.x && wayPoint.z < TopFrontier.position.z && wayPoint.z > BotFrontier.position.z)
         {
@@ -274,7 +271,7 @@ public class TankMovement : MonoBehaviour
         {
             wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
             wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
-            transform.LookAt(wayPoint);
+            //transform.LookAt(wayPoint);
 
             Tank.destination = wayPoint;
             walkable = Tank.CalculatePath(Tank.destination, path);//repath the next waypoint
@@ -288,22 +285,15 @@ public class TankMovement : MonoBehaviour
 
     private void Patrol()
     {
-
-        // Returns if no points have been set up
         if (pointChildren.Length == 0)
             return;
-
-        // Set the agent to go to the currently selected destination.
+        Tank.angularSpeed = 200f;
         Tank.destination = pointChildren[destPoint].transform.position;
-
-        // Choose the next point in the array as the destination,
-        // cycling to the start if necessary.
         destPoint = (destPoint + 1) % pointChildren.Length;
+        //transform.LookAt(Tank.destination);
 
         Debug.Log(pointChildren[2].transform.position.y);
         Debug.Log("MEMBERS:" + pointChildren.Length);
-       
-        //Debug.Log("FIRST:" + Point1.position);
-        //Debug.Log("BLUE:" + wayPoint2);
+
     }
 }
