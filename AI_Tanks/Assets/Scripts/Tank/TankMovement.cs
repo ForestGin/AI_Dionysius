@@ -47,6 +47,11 @@ public class TankMovement : MonoBehaviour
     private Transform LeftFrontier;
     private Transform RightFrontier;
 
+    //patrol
+    private GameObject[] pointChildren;
+    private GameObject Points;  
+    private int destPoint = 0;
+    Vector3 wayPoint2 = new Vector3(0.0f, 0.0f, 0.0f);
 
     private void Awake()
     {
@@ -81,7 +86,20 @@ public class TankMovement : MonoBehaviour
         if (m_PlayerNumber == 2)
             Wander();
         //
+
+        //patrol
+        Points = GameObject.Find("Points");
+        pointChildren = new GameObject[Points.transform.childCount];
+        for (int i = 0; i < Points.transform.childCount; i++)
+        {
+            pointChildren[i] = Points.transform.GetChild(i).gameObject;
+        }
         
+
+        if (m_PlayerNumber == 1)
+            Patrol();
+
+        //
 
         m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
 
@@ -136,10 +154,16 @@ public class TankMovement : MonoBehaviour
             }
         }
 
-        // Store the player's input and make sure the audio for the engine is playing.
+        if (m_PlayerNumber == 1)
+        {
+            if (!Tank.pathPending && Tank.remainingDistance < 1f)
+                Patrol();
+        }
 
-        //m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
-        //m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
+            // Store the player's input and make sure the audio for the engine is playing.
+
+            //m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
+            //m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
         m_ClosestTankPosition = GetClosestTankPosition();
 
@@ -239,10 +263,6 @@ public class TankMovement : MonoBehaviour
 
         wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
         wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
-        //wayPoint.x = -48f;
-        //wayPoint.y = 0f;
-        //wayPoint.z = -9f;
-
         transform.LookAt(wayPoint);
 
         if (wayPoint.x > LeftFrontier.position.x && wayPoint.x < RightFrontier.position.x && wayPoint.z < TopFrontier.position.z && wayPoint.z > BotFrontier.position.z)
@@ -264,5 +284,26 @@ public class TankMovement : MonoBehaviour
         Debug.Log(path.status);
         Debug.Log(wayPoint);
         
+    }
+
+    private void Patrol()
+    {
+
+        // Returns if no points have been set up
+        if (pointChildren.Length == 0)
+            return;
+
+        // Set the agent to go to the currently selected destination.
+        Tank.destination = pointChildren[destPoint].transform.position;
+
+        // Choose the next point in the array as the destination,
+        // cycling to the start if necessary.
+        destPoint = (destPoint + 1) % pointChildren.Length;
+
+        Debug.Log(pointChildren[2].transform.position.y);
+        Debug.Log("MEMBERS:" + pointChildren.Length);
+       
+        //Debug.Log("FIRST:" + Point1.position);
+        //Debug.Log("BLUE:" + wayPoint2);
     }
 }
