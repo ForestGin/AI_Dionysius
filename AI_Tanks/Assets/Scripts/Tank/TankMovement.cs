@@ -93,6 +93,12 @@ public class TankMovement : MonoBehaviour
 
     private void Update()
     {
+        //Debug path line
+        for (int i = 0; i < path.corners.Length - 1; i++)
+        {
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+        }
+
         //wander logic and acceleration
         if (m_PlayerNumber == 2)
         {
@@ -227,7 +233,7 @@ public class TankMovement : MonoBehaviour
 
         Debug.Log(walkable);
         Debug.Log(path.status);
-        Debug.Log(wayPoint /*+ " and " + (transform.position - wayPoint).magnitude*/);
+        Debug.Log(wayPoint);
         
     }
 }
