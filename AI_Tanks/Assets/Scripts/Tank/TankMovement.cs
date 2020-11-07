@@ -41,6 +41,12 @@ public class TankMovement : MonoBehaviour
     private NavMeshAgent Tank;
     private NavMeshPath path;
     private bool walkable = true;
+    //frontiers
+    private Transform TopFrontier;
+    private Transform BotFrontier;
+    private Transform LeftFrontier;
+    private Transform RightFrontier;
+
 
     private void Awake()
     {
@@ -64,10 +70,17 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+        //wander
+        TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
+        BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
+        LeftFrontier = GameObject.Find("LeftFrontier").GetComponent<Transform>();
+        RightFrontier = GameObject.Find("RightFrontier").GetComponent<Transform>();
+
         path = new NavMeshPath();
         Tank = GetComponent<NavMeshAgent>();
         if (m_PlayerNumber == 2)
             Wander();
+        //
         
 
         m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -223,13 +236,29 @@ public class TankMovement : MonoBehaviour
 
     private void Wander()
     {
-       
+
         wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
         wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+        //wayPoint.x = -48f;
+        //wayPoint.y = 0f;
+        //wayPoint.z = -9f;
+
         transform.LookAt(wayPoint);
 
-        Tank.destination = wayPoint;
-        walkable = Tank.CalculatePath(Tank.destination, path);//returns true if path is find
+        if (wayPoint.x > LeftFrontier.position.x && wayPoint.x < RightFrontier.position.x && wayPoint.z < TopFrontier.position.z && wayPoint.z > BotFrontier.position.z)
+        {
+            Tank.destination = wayPoint;
+            walkable = Tank.CalculatePath(Tank.destination, path);//returns true if path is find
+        }
+        else if(wayPoint.x < LeftFrontier.position.x && wayPoint.x > RightFrontier.position.x && wayPoint.z > TopFrontier.position.z && wayPoint.z < BotFrontier.position.z)
+        {
+            wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
+            wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+            transform.LookAt(wayPoint);
+
+            Tank.destination = wayPoint;
+            walkable = Tank.CalculatePath(Tank.destination, path);//repath the next waypoint
+        }
 
         Debug.Log(walkable);
         Debug.Log(path.status);
