@@ -25,36 +25,35 @@ public class TankMovement : MonoBehaviour
     private float m_OriginalPitch;
 
     //------------------------------------------------------------
-    private GameManager m_ManagerScript;
-    //public Vector3 m_MyTankPosition;
-    public Vector3 m_ClosestTankPosition;
 
-    private GameObject m_Turret;
-    private Transform m_TankTransform;
-    private Transform m_TurretTransform;
-
-    //wander
+    //Wander
     Vector3 wayPoint = new Vector3(0.0f, 0.0f, 0.0f);
     private float Range = 20f;
     private NavMeshAgent Tank;
     private NavMeshPath path;
     private bool walkable = true;
-    //frontiers
+
+    //Wander Frontiers
     private Transform TopFrontier;
     private Transform BotFrontier;
     private Transform LeftFrontier;
     private Transform RightFrontier;
 
-    //patrol
+    //Patrol
     private GameObject[] pointChildren;
     private GameObject Points;  
     public int destPoint = -1;
-    Vector3 wayPoint2 = new Vector3(0.0f, 0.0f, 0.0f);
+
     private float breakforce = 0.25f;
     private float speed = 3.5f;
 
+<<<<<<< Updated upstream
     //UI
     private LineRenderer trailRenderer;
+=======
+    //TargetUI
+    public Image m_ImageTarget;//Initialized via inspector
+>>>>>>> Stashed changes
 
     private void Awake()
     {
@@ -75,38 +74,50 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+<<<<<<< Updated upstream
 
         trailRenderer = GetComponent<LineRenderer>();
 
        
 
         //wander
+=======
+        //Tank Agent
+        path = new NavMeshPath();
+        Tank = GetComponent<NavMeshAgent>();
+
+        //Wander frontiers
+>>>>>>> Stashed changes
         TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
         BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
         LeftFrontier = GameObject.Find("LeftFrontier").GetComponent<Transform>();
         RightFrontier = GameObject.Find("RightFrontier").GetComponent<Transform>();
 
-        path = new NavMeshPath();
-        Tank = GetComponent<NavMeshAgent>();
+        //Wander
         if (m_PlayerNumber % 2 == 0) //Even number players
+        {
             Wander();
-        //
+        }
 
-        //patrol
+        //Patrol Points
         Points = GameObject.Find("Points");
         pointChildren = new GameObject[Points.transform.childCount];
+
         for (int i = 0; i < Points.transform.childCount; i++)
         {
             pointChildren[i] = Points.transform.GetChild(i).gameObject;
         }
-        
 
-        if (m_PlayerNumber %2 == 1) //Odd number players
+        //Patrol
+        if (m_PlayerNumber % 2 == 1) //Odd number players
+        {
             Patrol();
+        }
 
-        //
-
-        m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
+        //Setting Target Image position
+        //m_ImageTarget = GameObject.Sprite.Find("TargetImage");
+        //m_ImageTarget.transform.position = new Vector3(Tank.destination.x, 0.1f, Tank.destination.z);
+        //m_ImageTarget.color = m_PlayerColor;
 
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
@@ -163,6 +174,10 @@ public class TankMovement : MonoBehaviour
                 Tank.speed = speed;
             }
         }
+
+        //Setting Target Image position
+        //m_ImageTarget.transform.position = Vector3.zero;/*new Vector3(Tank.destination.x, 0.1f, Tank.destination.z);*/
+        //m_ImageTarget.color = m_PlayerColor;
 
         EngineAudio ();
     }
