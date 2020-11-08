@@ -15,14 +15,12 @@ public class TankManager
     private TankMovement m_Movement;       
     private TankShooting m_Shooting;
     private GameObject m_CanvasGameObject;
-    private GameObject m_Turret;
 
     public void Setup()
     {
         m_Movement = m_Instance.GetComponent<TankMovement>();
         m_Shooting = m_Instance.GetComponent<TankShooting>();
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
-        m_Turret = m_Instance.transform.Find("TankRenderers/TankTurret").gameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
@@ -39,6 +37,8 @@ public class TankManager
 
     public void DisableControl()
     {
+        m_Instance.transform.Find("TankRenderers/TankTurret").transform.LookAt(m_Instance.transform.forward);
+
         m_Movement.enabled = false;
         m_Shooting.enabled = false;
 
@@ -48,6 +48,8 @@ public class TankManager
 
     public void EnableControl()
     {
+        m_Instance.transform.Find("TankRenderers/TankTurret").transform.LookAt(m_Instance.transform.forward);
+
         m_Movement.enabled = true;
         m_Shooting.enabled = true;
 
@@ -57,10 +59,10 @@ public class TankManager
 
     public void Reset()
     {
+        m_Instance.transform.Find("TankRenderers/TankTurret").transform.LookAt(m_Instance.transform.forward);
+
         m_Instance.transform.position = m_SpawnPoint.position;
         m_Instance.transform.rotation = m_SpawnPoint.rotation;
-
-        m_Turret.transform.Rotate(0, 0, 0);
 
         m_Instance.SetActive(false);
         m_Instance.SetActive(true);
