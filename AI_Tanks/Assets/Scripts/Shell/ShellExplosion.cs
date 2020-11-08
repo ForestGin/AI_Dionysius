@@ -6,53 +6,62 @@ public class ShellExplosion : MonoBehaviour
     public ParticleSystem m_ExplosionParticles;       
     public AudioSource m_ExplosionAudio;              
     public float m_MaxDamage = 100f;                  
-    public float m_ExplosionForce = 1000f;            
-    public float m_MaxLifeTime = 2f;                  
-    public float m_ExplosionRadius = 5f;              
+    public float m_ExplosionForce = 0f;            
+    public float m_MaxLifeTime = 10f;                  
+    public float m_ExplosionRadius = 5f;
 
+    private Rigidbody shellrb;
 
     private void Start()
     {
+        shellrb = gameObject.GetComponent<Rigidbody>();
         Destroy(gameObject, m_MaxLifeTime);
     }
 
+    private void Update()
+    {
+        transform.forward = shellrb.velocity;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Find all the tanks in an area around the shell and damage them.
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
-
-        for (int i = 00; i < colliders.Length; i++)
+        if (other.gameObject.layer != 10)
         {
-            Rigidbody targetRigibody = colliders[i].GetComponent<Rigidbody>();
+            // Find all the tanks in an area around the shell and damage them.
+            Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
-            if (!targetRigibody)
+            for (int i = 00; i < colliders.Length; i++)
             {
-                continue;
+                Rigidbody targetRigibody = colliders[i].GetComponent<Rigidbody>();
+
+                if (!targetRigibody)
+                {
+                    continue;
+                }
+
+                //targetRigibody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
+
+                TankHealth targetHealth = targetRigibody.GetComponent<TankHealth>();
+
+                if (!targetHealth)
+                {
+                    continue;
+                }
+
+                float damage = CalculateDamage(targetRigibody.position);
+
+                targetHealth.TakeDamage(damage);
             }
 
-            targetRigibody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
+            m_ExplosionParticles.transform.parent = null; //so when shells gets destroyed the particles still on
 
-            TankHealth targetHealth = targetRigibody.GetComponent<TankHealth>();
+            m_ExplosionParticles.Play();
 
-            if (!targetHealth)
-            {
-                continue;
-            }
+            m_ExplosionAudio.Play();
 
-            float damage = CalculateDamage(targetRigibody.position);
-
-            targetHealth.TakeDamage(damage);
+            Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.main.duration);
+            Destroy(gameObject);
         }
-
-        m_ExplosionParticles.transform.parent = null; //so when shells gets destroyed the particles still on
-
-        m_ExplosionParticles.Play();
-
-        m_ExplosionAudio.Play();
-
-        Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
-        Destroy(gameObject);
     }
 
 
