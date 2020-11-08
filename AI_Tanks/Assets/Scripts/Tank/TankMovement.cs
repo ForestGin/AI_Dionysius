@@ -49,7 +49,8 @@ public class TankMovement : MonoBehaviour
 
     //UI
     private LineRenderer trailRenderer;
-
+    bool debug = false;
+    private int counter = 0;
     //TargetUI
     public Image m_ImageTarget;//Initialized via inspector
 
@@ -120,13 +121,25 @@ public class TankMovement : MonoBehaviour
     {
 
         //path debug
-        for (int i = 0; i < path.corners.Length - 1; i++)
-        {
-            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+        //for (int i = 0; i < path.corners.Length - 1; i++)
+        //{
+        //    Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
       
-        }
+        //}
 
-        if(Tank.hasPath)
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+
+            if (debug)
+            {
+                debug = false;
+            }
+            else
+                debug = true;
+        }
+       
+
+        if(Tank.hasPath && debug)
         {
             trailRenderer.positionCount = Tank.path.corners.Length;
             trailRenderer.SetPositions(Tank.path.corners);
