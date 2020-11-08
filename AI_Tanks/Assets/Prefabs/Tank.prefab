@@ -1050,6 +1050,7 @@ MonoBehaviour:
   m_FireTransform: {fileID: 500766543}
   m_ShootingAudio: {fileID: 8801932895721469099}
   m_FireClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_Turret: {fileID: 0}
   m_ClosestTankPosition: {x: 0, y: 0, z: 0}
   m_ClosestTankDistance: 0
   m_RateOfFire: 1
@@ -1075,7 +1076,7 @@ NavMeshAgent:
   m_Acceleration: 6
   avoidancePriority: 50
   m_AngularSpeed: 80
-  m_StoppingDistance: 3
+  m_StoppingDistance: 2.5
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 0

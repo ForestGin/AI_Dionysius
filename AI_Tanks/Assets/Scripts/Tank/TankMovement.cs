@@ -47,7 +47,7 @@ public class TankMovement : MonoBehaviour
     //patrol
     private GameObject[] pointChildren;
     private GameObject Points;  
-    private int destPoint = 0;
+    public int destPoint = -1;
     Vector3 wayPoint2 = new Vector3(0.0f, 0.0f, 0.0f);
     private float breakforce = 0.25f;
     private float speed = 3.5f;
@@ -133,24 +133,25 @@ public class TankMovement : MonoBehaviour
         if (m_PlayerNumber == 2)
         {
            
-            if ((transform.position - Tank.destination).magnitude < Tank.stoppingDistance)
+            if ((transform.position - Tank.destination).magnitude <= 3f && Tank.speed > 1f)
             {
                 Tank.speed -= breakforce;
             }
 
-            if ((transform.position - Tank.destination).magnitude < (Tank.stoppingDistance - 2f))
+            if ((transform.position - Tank.destination).magnitude <= Tank.stoppingDistance)
             {
-                Wander();
                 Tank.speed = speed;
+                Wander();
             }
         }
 
+        //patrol
         if (m_PlayerNumber == 1)
         {
-            if (!Tank.pathPending && Tank.remainingDistance < 3f)
+            if (!Tank.pathPending && Tank.remainingDistance <= 3f)
                 Tank.speed -= breakforce;
 
-            if (!Tank.pathPending && Tank.remainingDistance < 1f)
+            if (!Tank.pathPending && Tank.remainingDistance <= 1f)
             {
                 Patrol();
                 Tank.speed = speed;
@@ -285,15 +286,60 @@ public class TankMovement : MonoBehaviour
 
     private void Patrol()
     {
+        
         if (pointChildren.Length == 0)
             return;
+
+        if (destPoint == -1)
+        {
+            Tank.destination = ClosestPatrolPoint();
+        }
+        else
+        {
+            Tank.destination = pointChildren[destPoint].transform.position;
+            destPoint = (destPoint + 1) % pointChildren.Length;
+        }
+
         Tank.angularSpeed = 200f;
-        Tank.destination = pointChildren[destPoint].transform.position;
-        destPoint = (destPoint + 1) % pointChildren.Length;
         //transform.LookAt(Tank.destination);
 
         Debug.Log(pointChildren[2].transform.position.y);
         Debug.Log("MEMBERS:" + pointChildren.Length);
 
+    }
+
+
+    private Vector3 ClosestPatrolPoint()
+    {
+        float dist = -1;
+        float mindist = 0;
+
+        Vector3 closest = Vector3.zero;
+
+        for (int i = 0; i < pointChildren.Length; i++)
+        {
+                        
+            //First iteration
+            if (dist == -1)
+            {                
+                mindist = dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
+                closest = pointChildren[i].transform.position;
+                destPoint = i;
+            }
+            else
+            {
+                dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
+
+                if (dist < mindist)
+                {
+                    mindist = dist;
+                    closest = pointChildren[i].transform.position;
+                    destPoint = i;
+                }
+            }
+            
+        }
+
+        return closest;
     }
 }

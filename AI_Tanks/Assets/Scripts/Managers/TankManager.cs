@@ -57,6 +57,7 @@ public class TankManager
 
     public void Reset()
     {
+        m_Movement.destPoint = -1;
         m_Instance.transform.position = m_SpawnPoint.position;
         m_Instance.transform.rotation = m_SpawnPoint.rotation;
 
