@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class TankMovement : MonoBehaviour
 {
     public int m_PlayerNumber = 1;
-    public Color m_PlayerColor;
+    public Color m_PlayerColor = Color.white;
     public float m_Speed = 7f;            
     public float m_TurnSpeed = 180f;       
     public AudioSource m_MovementAudio;    
@@ -53,6 +53,9 @@ public class TankMovement : MonoBehaviour
     private float breakforce = 0.25f;
     private float speed = 3.5f;
 
+    //UI
+    private LineRenderer trailRenderer;
+
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -72,6 +75,11 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+
+        trailRenderer = GetComponent<LineRenderer>();
+
+       
+
         //wander
         TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
         BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
@@ -108,10 +116,23 @@ public class TankMovement : MonoBehaviour
 
     private void Update()
     {
-        //Debug path line
+
+        //path debug
         for (int i = 0; i < path.corners.Length - 1; i++)
         {
             Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+      
+        }
+
+        if(Tank.hasPath)
+        {
+            trailRenderer.positionCount = Tank.path.corners.Length;
+            trailRenderer.SetPositions(Tank.path.corners);
+            trailRenderer.enabled = true;
+        }
+        else
+        {
+            trailRenderer.enabled = false;
         }
 
         //wander logic and acceleration
@@ -216,6 +237,8 @@ public class TankMovement : MonoBehaviour
             Tank.destination = wayPoint;
             walkable = Tank.CalculatePath(Tank.destination, path);//repath the next waypoint
         }
+
+        trailRenderer.SetPositions(path.corners);
 
         Debug.Log(walkable);
         Debug.Log(path.status);
