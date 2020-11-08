@@ -47,13 +47,11 @@ public class TankMovement : MonoBehaviour
     private float breakforce = 0.25f;
     private float speed = 3.5f;
 
-<<<<<<< Updated upstream
     //UI
     private LineRenderer trailRenderer;
-=======
+
     //TargetUI
     public Image m_ImageTarget;//Initialized via inspector
->>>>>>> Stashed changes
 
     private void Awake()
     {
@@ -74,20 +72,13 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-<<<<<<< Updated upstream
-
         trailRenderer = GetComponent<LineRenderer>();
 
-       
-
-        //wander
-=======
         //Tank Agent
         path = new NavMeshPath();
         Tank = GetComponent<NavMeshAgent>();
 
         //Wander frontiers
->>>>>>> Stashed changes
         TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
         BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
         LeftFrontier = GameObject.Find("LeftFrontier").GetComponent<Transform>();
