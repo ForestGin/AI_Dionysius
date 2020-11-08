@@ -7,7 +7,8 @@ using UnityEngine.AI;
 
 public class TankMovement : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;         
+    public int m_PlayerNumber = 1;
+    public Color m_PlayerColor;
     public float m_Speed = 7f;            
     public float m_TurnSpeed = 180f;       
     public AudioSource m_MovementAudio;    
@@ -57,7 +58,6 @@ public class TankMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
-
     private void OnEnable ()
     {
         m_Rigidbody.isKinematic = false;
@@ -65,12 +65,10 @@ public class TankMovement : MonoBehaviour
         m_TurnInputValue = 0f;
     }
 
-
     private void OnDisable ()
     {
         m_Rigidbody.isKinematic = true;
     }
-
 
     private void Start()
     {
@@ -82,7 +80,7 @@ public class TankMovement : MonoBehaviour
 
         path = new NavMeshPath();
         Tank = GetComponent<NavMeshAgent>();
-        if (m_PlayerNumber == 2)
+        if (m_PlayerNumber % 2 == 0) //Even number players
             Wander();
         //
 
@@ -95,25 +93,12 @@ public class TankMovement : MonoBehaviour
         }
         
 
-        if (m_PlayerNumber == 1)
+        if (m_PlayerNumber %2 == 1) //Odd number players
             Patrol();
 
         //
 
         m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
-
-        //m_Turret = gameObject.transform.Find("TankRenderers/TankTurret").gameObject;
-        
-        //if (m_Turret != null)
-        //{
-        //    Debug.Log("Turret Child found successfully!");
-        //}
-        //else
-        //{
-        //    Debug.Log("Turret Child not found!");
-        //}
-
-        //m_ClosestTankPosition = GetClosestTankPosition();
 
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
@@ -130,7 +115,7 @@ public class TankMovement : MonoBehaviour
         }
 
         //wander logic and acceleration
-        if (m_PlayerNumber == 2)
+        if (m_PlayerNumber % 2 == 0)
         {
            
             if ((transform.position - Tank.destination).magnitude <= 3f && Tank.speed > 1f)
@@ -146,7 +131,7 @@ public class TankMovement : MonoBehaviour
         }
 
         //patrol
-        if (m_PlayerNumber == 1)
+        if (m_PlayerNumber %2 == 1)
         {
             if (!Tank.pathPending && Tank.remainingDistance <= 3f)
                 Tank.speed -= breakforce;
@@ -158,51 +143,8 @@ public class TankMovement : MonoBehaviour
             }
         }
 
-            // Store the player's input and make sure the audio for the engine is playing.
-
-            //m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
-            //m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
-
-        //m_ClosestTankPosition = GetClosestTankPosition();
-        //m_ClosestTankPosition.y = 5;
-        //m_Turret.transform.LookAt(m_ClosestTankPosition);
-
         EngineAudio ();
     }
-
-    //Vector3 GetClosestTankPosition()
-    //{
-    //    float dist = -1;
-    //    float mindist = 0;
-
-    //    Vector3 closest = Vector3.zero;
-
-    //    for (int i = 0; i < m_ManagerScript.m_Tanks.Length; i++)
-    //    {
-    //        //Making sure that the closest tank is not themselves
-    //        if (i != m_PlayerNumber - 1)
-    //        {
-    //            //First iteration
-    //            if (dist == -1)
-    //            {
-    //                mindist = dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
-    //                closest = m_ManagerScript.m_TanksPosition[i];
-    //            }
-    //            else
-    //            {
-    //                dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
-
-    //                if (dist < mindist)
-    //                {
-    //                    mindist = dist;
-    //                    closest = m_ManagerScript.m_TanksPosition[i];
-    //                }
-    //            }
-    //        }  
-    //    }
-
-    //    return closest;
-    //}
 
     private void EngineAudio()
     {
@@ -228,14 +170,12 @@ public class TankMovement : MonoBehaviour
         }
     }
 
-
     private void FixedUpdate()
     {
         // Move and turn the tank.
         Move ();
         Turn ();
     }
-
 
     private void Move()
     {
@@ -244,7 +184,6 @@ public class TankMovement : MonoBehaviour
     
         m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
     }
-
 
     private void Turn()
     {
@@ -305,7 +244,6 @@ public class TankMovement : MonoBehaviour
 
         Debug.Log(pointChildren[2].transform.position.y);
         Debug.Log("MEMBERS:" + pointChildren.Length);
-
     }
 
 
@@ -336,8 +274,7 @@ public class TankMovement : MonoBehaviour
                     closest = pointChildren[i].transform.position;
                     destPoint = i;
                 }
-            }
-            
+            } 
         }
 
         return closest;

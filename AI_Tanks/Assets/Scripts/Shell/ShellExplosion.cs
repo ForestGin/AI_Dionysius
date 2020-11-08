@@ -81,4 +81,9 @@ public class ShellExplosion : MonoBehaviour
 
         return damage;
     }
+
+    public void DestroyOnReset()
+    {
+        Destroy(gameObject);
+    }
 }

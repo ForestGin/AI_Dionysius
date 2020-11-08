@@ -1015,6 +1015,7 @@ MonoBehaviour:
   m_EngineDriving: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
   m_PitchRange: 0.2
   m_ClosestTankPosition: {x: 0, y: 0, z: 0}
+  destPoint: -1
 --- !u!114 &2135786514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,6 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8326b9dca06e5bc4885942c9371f51f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PlayerNumber: 1
   m_StartingHealth: 100
   m_Slider: {fileID: 330352450}
   m_FillImage: {fileID: 1669603512}
@@ -1056,7 +1058,7 @@ MonoBehaviour:
   m_RateOfFire: 1
   m_ShootDelay: 0
   m_gravity: 9.8
-  m_InitialVelocity: 20
+  m_InitialVelocity: 18
   m_CurrentVelocity: 0
   m_CurrentHeight: 0
   m_ShootingAngle: 0

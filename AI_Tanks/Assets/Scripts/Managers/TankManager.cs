@@ -9,21 +9,30 @@ public class TankManager
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
-    [HideInInspector] public int m_Wins;                     
+    [HideInInspector] public int m_Wins;
+    [HideInInspector] public bool m_IsDead = false;
 
 
     private TankMovement m_Movement;       
     private TankShooting m_Shooting;
+    private TankHealth m_Health;
     private GameObject m_CanvasGameObject;
 
     public void Setup()
     {
         m_Movement = m_Instance.GetComponent<TankMovement>();
         m_Shooting = m_Instance.GetComponent<TankShooting>();
+        m_Health = m_Instance.GetComponent<TankHealth>();
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
+        m_Movement.m_PlayerColor = m_PlayerColor;
+
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
+        m_Shooting.m_PlayerColor = m_PlayerColor;
+
+        m_Health.m_PlayerNumber = m_PlayerNumber;
+        m_Health.m_PlayerColor = m_PlayerColor;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
@@ -37,10 +46,9 @@ public class TankManager
 
     public void DisableControl()
     {
-        m_Instance.transform.Find("TankRenderers/TankTurret").transform.LookAt(m_Instance.transform.forward);
-
         m_Movement.enabled = false;
         m_Shooting.enabled = false;
+        //m_Health.enabled = false;
 
         m_CanvasGameObject.SetActive(false);
     }
@@ -48,10 +56,9 @@ public class TankManager
 
     public void EnableControl()
     {
-        m_Instance.transform.Find("TankRenderers/TankTurret").transform.LookAt(m_Instance.transform.forward);
-
         m_Movement.enabled = true;
         m_Shooting.enabled = true;
+        //m_Health.enabled = true;
 
         m_CanvasGameObject.SetActive(true);
     }

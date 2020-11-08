@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour
     public GameObject m_TankPrefab;         
     public TankManager[] m_Tanks;
 
+    private GameObject[] m_Shells;
+
     public Vector3[] m_TanksPosition;
+    public bool[] m_TanksDead;
 
 
     private int m_RoundNumber;              
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
 
         //Initializing the position array with the number of tanks
         m_TanksPosition = new Vector3[m_Tanks.Length];
+        m_TanksDead = new bool[m_Tanks.Length];
 
         SpawnAllTanks();
         GetTanksPosition();
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         GetTanksPosition();
+        //GetTanksDead(); //Set from Tank health
     }
 
 
@@ -205,6 +210,18 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < m_Tanks.Length; i++)
         {
             m_Tanks[i].Reset();
+        }
+
+        for (int i = 0; i < m_Tanks.Length; i++)
+        {
+            m_TanksDead[i] = false;
+        }
+
+        m_Shells = GameObject.FindGameObjectsWithTag("Projectile");
+
+        foreach (GameObject Projectile in m_Shells)
+        {
+            Destroy(Projectile);
         }
     }
 

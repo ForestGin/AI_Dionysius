@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class TankHealth : MonoBehaviour
 {
+    public int m_PlayerNumber = 1;
+    public Color m_PlayerColor;
     public float m_StartingHealth = 100f;          
     public Slider m_Slider;                        
     public Image m_FillImage;                      
@@ -14,11 +16,15 @@ public class TankHealth : MonoBehaviour
     private AudioSource m_ExplosionAudio;          
     private ParticleSystem m_ExplosionParticles;   
     private float m_CurrentHealth;  
-    private bool m_Dead;            
+    private bool m_Dead;
+
+    public GameManager m_Manager;
 
 
     private void Awake()
     {
+        m_Manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
         m_ExplosionAudio = m_ExplosionParticles.GetComponent<AudioSource>();
 
@@ -28,8 +34,10 @@ public class TankHealth : MonoBehaviour
 
     private void OnEnable()
     {
+        
         m_CurrentHealth = m_StartingHealth;
         m_Dead = false;
+        //m_Manager.m_TanksDead[m_PlayerNumber - 1] = false;
 
         SetHealthUI();
     }
@@ -65,6 +73,7 @@ public class TankHealth : MonoBehaviour
         // Play the effects for the death of the tank and deactivate it.
 
         m_Dead = true;
+        m_Manager.m_TanksDead[m_PlayerNumber - 1] = true;
 
         m_ExplosionParticles.transform.position = transform.position;
        

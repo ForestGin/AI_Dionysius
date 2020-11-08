@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class TankShooting : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;       
+    public int m_PlayerNumber = 1;
+    public Color m_PlayerColor = Color.white;
     public Rigidbody m_Shell;            
     public Transform m_FireTransform;              
     public AudioSource m_ShootingAudio;      
@@ -12,10 +13,8 @@ public class TankShooting : MonoBehaviour
 
     //Shooting direction
     [HideInInspector]public GameObject m_Turret;
-    private Transform m_TankTransform;
-    private Transform m_TurretTransform;
 
-    private GameManager m_ManagerScript;
+    private GameManager m_Manager;
     public Vector3 m_ClosestTankPosition;
     public float m_ClosestTankDistance;
 
@@ -47,7 +46,7 @@ public class TankShooting : MonoBehaviour
 
     private void Start()
     {
-        m_ManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
+        m_Manager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         m_Turret = gameObject.transform.Find("TankRenderers/TankTurret").gameObject;
 
@@ -60,7 +59,7 @@ public class TankShooting : MonoBehaviour
             Debug.Log("Turret Child not found!");
         }
 
-        m_ClosestTankPosition = GetClosestTankPosition();
+        m_ClosestTankPosition = GetClosestTankAlivePosition();
 
         m_InitialHeight = m_FireTransform.position.y;
 
@@ -73,7 +72,7 @@ public class TankShooting : MonoBehaviour
     private void Update()
     {
         //Turret pointing at closest tank
-        m_ClosestTankPosition = GetClosestTankPosition();
+        m_ClosestTankPosition = GetClosestTankAlivePosition();
         m_ClosestTankPosition.y = 1.2f;
 
         m_Turret.transform.LookAt(m_ClosestTankPosition);
@@ -93,7 +92,7 @@ public class TankShooting : MonoBehaviour
             }
 
             //Fire Delay
-            if (m_ShootingTimer < Time.time)
+            if (m_ShootingTimer < Time.time && !float.IsNaN(m_ShootingAngle))
             {
                 //Fire shell
                 Fire();
@@ -117,7 +116,7 @@ public class TankShooting : MonoBehaviour
     void OnDrawGizmos()
     {
         //Draw Radius circle
-        Gizmos.color = Color.red;
+        Gizmos.color = m_PlayerColor;
         Gizmos.DrawWireSphere(m_FireTransform.position, m_MaxShootingRange);
     }
 
@@ -130,6 +129,8 @@ public class TankShooting : MonoBehaviour
         shellInstance.velocity = m_InitialVelocity * m_Turret.transform.forward;
 
         shellInstance.useGravity = true;
+
+        shellInstance.tag = "Projectile";
 
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play();
@@ -148,42 +149,61 @@ public class TankShooting : MonoBehaviour
         float sqrt = (v * v * v * v) - (m_gravity * (m_gravity * (x * x) + 2 * y * (v * v)));
 
         sqrt = Mathf.Sqrt(sqrt);
-        float anglePos = Mathf.Atan(((v * v) + sqrt) / (m_gravity * x));
-        float angleNeg = Mathf.Atan(((v * v) - sqrt) / (m_gravity * x));
+        float anglePos = Mathf.Rad2Deg * Mathf.Atan(((v * v) + sqrt) / (m_gravity * x));
+        float angleNeg = Mathf.Rad2Deg * Mathf.Atan(((v * v) - sqrt) / (m_gravity * x));
 
-        if (m_PlayerNumber == 1)
-            return anglePos * Mathf.Rad2Deg;
-        else if (m_PlayerNumber == 2)
-            return angleNeg * Mathf.Rad2Deg;
-        else return angleNeg;
+        if (m_PlayerNumber % 4 == 0) //If player number 4 (out of 4) will have a high parabola
+        {
+            return anglePos;
+        }
+        else if (m_PlayerNumber % 4 == 1) //If player number 1 (out of 4) will have a high parabola
+        {
+            return anglePos;
+        }
+        else if (m_PlayerNumber % 4 == 2) //If player number 2 (out of 4) will have a low parabola
+        {
+            return angleNeg;
+        }
+        else if (m_PlayerNumber % 4 == 3) //If player number 3 (out of 4) will have a low parabola
+        {
+            return angleNeg;
+        }
+        else
+        {
+            return angleNeg;
+        }
     }
 
-    Vector3 GetClosestTankPosition()
+    private Vector3 GetClosestTankAlivePosition()
     {
         float dist = -1;
         float mindist = 0;
 
         Vector3 closest = Vector3.zero;
 
-        for (int i = 0; i < m_ManagerScript.m_Tanks.Length; i++)
+        for (int i = 0; i < m_Manager.m_Tanks.Length; i++)
         {
             //Making sure that the closest tank is not themselves
             if (i != m_PlayerNumber - 1)
             {
-                //First iteration
-                if (dist == -1)
+                //Making sure that the closest tank is not dead
+                if (!m_Manager.m_TanksDead[i])
                 {
-                    mindist = dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
-                    closest = m_ManagerScript.m_TanksPosition[i];
-                }
-                else
-                {
-                    dist = Vector3.Distance(m_ManagerScript.m_TanksPosition[i], gameObject.transform.position);
-
-                    if (dist < mindist)
+                    //First iteration
+                    if (dist == -1)
                     {
-                        mindist = dist;
-                        closest = m_ManagerScript.m_TanksPosition[i];
+                        mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
+                        closest = m_Manager.m_TanksPosition[i];
+                    }
+                    else
+                    {
+                        dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
+
+                        if (dist < mindist)
+                        {
+                            mindist = dist;
+                            closest = m_Manager.m_TanksPosition[i];
+                        }
                     }
                 }
             }
