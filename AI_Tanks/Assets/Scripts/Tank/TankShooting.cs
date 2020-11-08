@@ -116,7 +116,7 @@ public class TankShooting : MonoBehaviour
     void OnDrawGizmos()
     {
         //Draw Radius circle
-        Gizmos.color = Color.white;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(m_FireTransform.position, m_MaxShootingRange);
     }
 
