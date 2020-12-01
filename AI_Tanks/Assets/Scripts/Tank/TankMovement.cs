@@ -54,6 +54,10 @@ public class TankMovement : MonoBehaviour
     //TargetUI
     public Image m_ImageTarget;//Initialized via inspector
 
+    //Bases
+    private GameObject[] basesChildren;
+    private GameObject Bases;
+
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -106,6 +110,16 @@ public class TankMovement : MonoBehaviour
             Patrol();
         }
 
+
+        //Bases
+        Bases = GameObject.Find("Bases");
+        basesChildren = new GameObject[Bases.transform.childCount];
+
+        for (int i = 0; i < Bases.transform.childCount; i++)
+        {
+            basesChildren[i] = Bases.transform.GetChild(i).gameObject;
+        }
+
         //Setting Target Image position
         //m_ImageTarget = GameObject.Sprite.Find("TargetImage");
         //m_ImageTarget.transform.position = new Vector3(Tank.destination.x, 0.1f, Tank.destination.z);
@@ -124,10 +138,17 @@ public class TankMovement : MonoBehaviour
         //for (int i = 0; i < path.corners.Length - 1; i++)
         //{
         //    Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
-      
+
         //}
 
-        if(Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.B))//test to check bases position and tank asignation
+        {
+
+            GotoBases();
+         
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
         {
 
             if (debug)
@@ -321,4 +342,18 @@ public class TankMovement : MonoBehaviour
 
         return closest;
     }
+
+    private void GotoBases()
+    {
+        if (basesChildren.Length == 0)
+            return;
+        //we are now making paired tanks go to a base and unpaired ones go to the other
+        if(m_PlayerNumber % 2 == 0)
+            Tank.destination = basesChildren[0].transform.position;
+        else
+            Tank.destination = basesChildren[1].transform.position;
+
+
+    }
+
 }
