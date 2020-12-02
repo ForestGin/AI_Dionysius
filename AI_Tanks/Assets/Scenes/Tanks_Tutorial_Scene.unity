@@ -955,7 +955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cdf27287505a0924bbd00142b740c661, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.09
+      value: 3.32
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cdf27287505a0924bbd00142b740c661, type: 3}
       propertyPath: m_LocalPosition.y
@@ -963,7 +963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cdf27287505a0924bbd00142b740c661, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.81
+      value: 20.65
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cdf27287505a0924bbd00142b740c661, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1224,7 +1224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b969b62f97816e449889e6f2091d5348, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 28.23
+      value: 34.39
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b969b62f97816e449889e6f2091d5348, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1590,7 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxTasksPerTick: 500
-  behavior: {fileID: 11400000, guid: 41ad51a4147305e4cb23ca4cb603c361, type: 2}
+  behavior: {fileID: 11400000, guid: 057bf50a56fbc5a469d306c6ded4001a, type: 2}
   paused: 0
   restartWhenFinished: 0
   blackboard:
@@ -1609,8 +1609,12 @@ MonoBehaviour:
     colorParams: []
     colorParamsNames: []
     colorParamsLostDefaultValue: 
-    objectParams: []
-    objectParamsNames: []
+    objectParams:
+    - {fileID: 0}
+    - {fileID: 1908996997}
+    objectParamsNames:
+    - target
+    - player
     objectParamsLostDefaultValue: 
     layerMaskParams: []
     layerMaskParamsNames: []
@@ -1671,6 +1675,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &896178531 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 111698, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88,
+    type: 3}
+  m_PrefabInstance: {fileID: 2040145013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &896178536
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896178531}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 99.99999, y: 1, z: 99.99999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &929839860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2697,6 +2720,12 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1908996997 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: b969b62f97816e449889e6f2091d5348,
+    type: 3}
+  m_PrefabInstance: {fileID: 654036864}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1930049784
 GameObject:
   m_ObjectHideFlags: 0
@@ -3420,6 +3449,10 @@ PrefabInstance:
     - target: {fileID: 6570560, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
       propertyPath: m_Center.z
       value: -52
+      objectReference: {fileID: 0}
+    - target: {fileID: 6476316, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
+      propertyPath: m_Convex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
