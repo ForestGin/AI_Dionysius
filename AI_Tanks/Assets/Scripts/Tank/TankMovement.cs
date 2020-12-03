@@ -141,12 +141,12 @@ public class TankMovement : MonoBehaviour
 
         //}
 
-        if (Input.GetKeyDown(KeyCode.B))//test to check bases position and tank asignation
-        {
+        //if (Input.GetKeyDown(KeyCode.B))//test to check bases position and tank asignation
+        //{
 
-            GotoBases();
+        //    GotoBases();
          
-        }
+        //}
 
         if (Input.GetKeyDown(KeyCode.P))
         {
