@@ -181,28 +181,31 @@ public class TankShooting : MonoBehaviour
 
         Vector3 closest = Vector3.zero;
 
-        for (int i = 0; i < m_Manager.m_Tanks.Length; i++)
+        for (int i = 0; i < m_Manager.m_Teams.Length; i++)
         {
-            //Making sure that the closest tank is not themselves
-            if (i != m_PlayerNumber - 1)
+            for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
             {
-                //Making sure that the closest tank is not dead
-                if (!m_Manager.m_TanksDead[i])
+                //Making sure that the closest tank is not themselves
+                if (i != m_PlayerNumber - 1)
                 {
-                    //First iteration
-                    if (dist == -1)
+                    //Making sure that the closest tank is not dead
+                    if (!m_Manager.m_TanksDead[i])
                     {
-                        mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
-                        closest = m_Manager.m_TanksPosition[i];
-                    }
-                    else
-                    {
-                        dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
-
-                        if (dist < mindist)
+                        //First iteration
+                        if (dist == -1)
                         {
-                            mindist = dist;
+                            mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
                             closest = m_Manager.m_TanksPosition[i];
+                        }
+                        else
+                        {
+                            dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
+
+                            if (dist < mindist)
+                            {
+                                mindist = dist;
+                                closest = m_Manager.m_TanksPosition[i];
+                            }
                         }
                     }
                 }
