@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3[] m_TanksPosition;
     public bool[] m_TanksDead;
+    public int m_TotalTanks = 0;
 
     public int m_InitialTankShellsMagazine;
     public int m_TotalTankShellsMagazine;
@@ -40,9 +41,10 @@ public class GameManager : MonoBehaviour
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
         //Initializing the position array with the number of tanks
-        
-        m_TanksPosition = new Vector3[CountAllTanks()];
-        m_TanksDead = new bool[CountAllTanks()];
+        m_TotalTanks = CountAllTanks();
+
+        m_TanksPosition = new Vector3[m_TotalTanks];
+        m_TanksDead = new bool[m_TotalTanks];
 
         SpawnAllTeams();
         GetTanksPosition();
@@ -82,8 +84,9 @@ public class GameManager : MonoBehaviour
 
             for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
             {
-                m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankPrefab, m_Teams[i].m_Tanks[i].m_SpawnPoint.position, m_Teams[i].m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
+                m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;
                 m_Teams[i].m_Tanks[j].m_PlayerNumber = iter + 1;
+                m_Teams[i].m_Tanks[j].m_TeamNumber = i + 1;
                 m_Teams[i].m_Tanks[j].m_PlayerColor = m_Teams[i].m_TeamColor;
 
                 m_Teams[i].m_Tanks[j].Setup();
@@ -92,7 +95,6 @@ public class GameManager : MonoBehaviour
             }
 
             //Another "for" ambulances
-            iter++;
         }
     }
 
@@ -107,27 +109,23 @@ public class GameManager : MonoBehaviour
             {
                 m_TanksPosition[iter] = m_Teams[i].m_Tanks[j].m_Instance.transform.position;
                 iter++;
-            }
-
-            iter++;  
+            }             
         }
     }
 
     private void SetCameraTargets()
     {
-        Transform[] targets = new Transform[CountAllTanks()];
+        Transform[] targets = new Transform[m_TotalTanks];
         int iter = 0;
 
         //Fill array of transforms for every tank on every team
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
             for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
             {
                 targets[iter] = m_Teams[i].m_Tanks[j].m_Instance.transform;
                 iter++;
-            }
-
-            iter++;
+            }  
         }
 
         m_CameraControl.m_Targets = targets;
@@ -273,7 +271,6 @@ public class GameManager : MonoBehaviour
                 m_TanksDead[iter] = false;
                 iter++;
             }
-            iter++;
         }
 
         //Destroy all shells left

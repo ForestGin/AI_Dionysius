@@ -4,7 +4,9 @@ using UnityEngine.UI;
 public class TankShooting : MonoBehaviour
 {
     public int m_PlayerNumber = 1;
+    public int m_TeamNumber = 1;
     public Color m_PlayerColor = Color.white;
+
     public Rigidbody m_Shell;            
     public Transform m_FireTransform;              
     public AudioSource m_ShootingAudio;      
@@ -180,31 +182,37 @@ public class TankShooting : MonoBehaviour
         float mindist = 0;
 
         Vector3 closest = Vector3.zero;
-
+        
+        //Iterating Teams
         for (int i = 0; i < m_Manager.m_Teams.Length; i++)
         {
-            for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
+            //Making sure its not drom its own team
+            if (i != m_TeamNumber - 1)
             {
-                //Making sure that the closest tank is not themselves
-                if (i != m_PlayerNumber - 1)
+                //Iterating Tanks inside Team
+                for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
                 {
-                    //Making sure that the closest tank is not dead
-                    if (!m_Manager.m_TanksDead[i])
+                    //Making sure that the closest tank is not themselves (redundant now)
+                    if (i != m_PlayerNumber - 1)
                     {
-                        //First iteration
-                        if (dist == -1)
+                        //Making sure that the closest tank is not dead
+                        if (!m_Manager.m_TanksDead[i])
                         {
-                            mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
-                            closest = m_Manager.m_TanksPosition[i];
-                        }
-                        else
-                        {
-                            dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
-
-                            if (dist < mindist)
+                            //First iteration
+                            if (dist == -1)
                             {
-                                mindist = dist;
+                                mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
                                 closest = m_Manager.m_TanksPosition[i];
+                            }
+                            else
+                            {
+                                dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
+
+                                if (dist < mindist)
+                                {
+                                    mindist = dist;
+                                    closest = m_Manager.m_TanksPosition[i];
+                                }
                             }
                         }
                     }

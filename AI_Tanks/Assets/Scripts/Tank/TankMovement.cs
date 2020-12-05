@@ -8,7 +8,9 @@ using UnityEngine.AI;
 public class TankMovement : MonoBehaviour
 {
     public int m_PlayerNumber = 1;
+    public int m_TeamNumber = 1;
     public Color m_PlayerColor = Color.white;
+
     public float m_Speed = 7f;            
     public float m_TurnSpeed = 180f;       
     public AudioSource m_MovementAudio;    
@@ -111,14 +113,14 @@ public class TankMovement : MonoBehaviour
         }
 
 
-        //Bases
-        Bases = GameObject.Find("Bases");
-        basesChildren = new GameObject[Bases.transform.childCount];
+        ////Bases
+        //Bases = GameObject.Find("Bases");
+        //basesChildren = new GameObject[Bases.transform.childCount];
 
-        for (int i = 0; i < Bases.transform.childCount; i++)
-        {
-            basesChildren[i] = Bases.transform.GetChild(i).gameObject;
-        }
+        //for (int i = 0; i < Bases.transform.childCount; i++)
+        //{
+        //    basesChildren[i] = Bases.transform.GetChild(i).gameObject;
+        //}
 
         //Setting Target Image position
         //m_ImageTarget = GameObject.Sprite.Find("TargetImage");
