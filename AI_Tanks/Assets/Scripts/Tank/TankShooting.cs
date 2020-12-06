@@ -184,47 +184,78 @@ public class TankShooting : MonoBehaviour
         int iter = 0;
 
         Vector3 closest = Vector3.zero;
-        
-        //Iterating Teams
+
         for (int i = 0; i < m_Manager.m_Teams.Length; i++)
         {
-            //Making sure its not drom its own team
-            if (i != m_TeamNumber - 1)
+            for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
             {
-                //Iterating Tanks inside Team
-                for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
+                if (m_Manager.m_Teams[i].m_Tanks[j].m_TeamNumber != m_TeamNumber)
                 {
-                    //Making sure that the closest tank is not themselves (redundant now)
-                    if (iter != m_PlayerNumber - 1)
+                    //Is not dead
+                    if (!m_Manager.m_TanksDead[iter])
                     {
-                        //Making sure that the closest tank is not dead
-                        if (!m_Manager.m_TanksDead[iter])
+                        //First iteration
+                        if (dist == -1)
                         {
-                            //First iteration
-                            if (dist == -1)
-                            {
-                                mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
-                                closest = m_Manager.m_TanksPosition[iter];
-                            }
-                            else
-                            {
-                                dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
-
-                                if (dist < mindist)
-                                {
-                                    mindist = dist;
-                                    closest = m_Manager.m_TanksPosition[iter];
-                                }
-                            }
-                            iter++;
+                            mindist = dist = Vector3.Distance(m_Manager.m_Teams[i].m_Tanks[j].m_Instance.transform.position, gameObject.transform.position);
+                            closest = m_Manager.m_Teams[i].m_Tanks[j].m_Instance.transform.position;
                         }
-                        else iter++;
+                        else
+                        {
+                            dist = Vector3.Distance(m_Manager.m_Teams[i].m_Tanks[j].m_Instance.transform.position, gameObject.transform.position);
+
+                            if (dist < mindist)
+                            {
+                                mindist = dist;
+                                closest = m_Manager.m_Teams[i].m_Tanks[j].m_Instance.transform.position;
+                            }
+                        }
                     }
-                    else iter++;
                 }
+                iter++;
             }
-            else iter++;
         }
+
+            //Iterating Teams
+        //for (int i = 0; i < m_Manager.m_Teams.Length; i++)
+        //{
+        //    //Making sure its not from its own team
+        //    if (i != m_TeamNumber - 1)
+        //    {
+        //        //Iterating Tanks inside Team
+        //        for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
+        //        {
+        //            //Making sure that the closest tank is not themselves (redundant now)
+        //            if (iter != m_PlayerNumber - 1)
+        //            {
+        //                //Making sure that the closest tank is not dead
+        //                if (!m_Manager.m_TanksDead[iter])
+        //                {
+        //                    //First iteration
+        //                    if (dist == -1)
+        //                    {
+        //                        mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
+        //                        closest = m_Manager.m_TanksPosition[iter];
+        //                    }
+        //                    else
+        //                    {
+        //                        dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
+
+        //                        if (dist < mindist)
+        //                        {
+        //                            mindist = dist;
+        //                            closest = m_Manager.m_TanksPosition[iter];
+        //                        }
+        //                    }
+        //                    iter++;
+        //                }
+        //                else iter++;
+        //            }
+        //            else iter++;
+        //        }
+        //    }
+        //    else iter++;
+        //}
 
         return closest;
     }
