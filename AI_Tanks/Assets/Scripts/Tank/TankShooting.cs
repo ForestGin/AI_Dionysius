@@ -181,6 +181,8 @@ public class TankShooting : MonoBehaviour
         float dist = -1;
         float mindist = 0;
 
+        int iter = 0;
+
         Vector3 closest = Vector3.zero;
         
         //Iterating Teams
@@ -193,31 +195,35 @@ public class TankShooting : MonoBehaviour
                 for (int j = 0; j < m_Manager.m_Teams[i].m_Tanks.Length; j++)
                 {
                     //Making sure that the closest tank is not themselves (redundant now)
-                    if (i != m_PlayerNumber - 1)
+                    if (iter != m_PlayerNumber - 1)
                     {
                         //Making sure that the closest tank is not dead
-                        if (!m_Manager.m_TanksDead[i])
+                        if (!m_Manager.m_TanksDead[iter])
                         {
                             //First iteration
                             if (dist == -1)
                             {
-                                mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
-                                closest = m_Manager.m_TanksPosition[i];
+                                mindist = dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
+                                closest = m_Manager.m_TanksPosition[iter];
                             }
                             else
                             {
-                                dist = Vector3.Distance(m_Manager.m_TanksPosition[i], gameObject.transform.position);
+                                dist = Vector3.Distance(m_Manager.m_TanksPosition[iter], gameObject.transform.position);
 
                                 if (dist < mindist)
                                 {
                                     mindist = dist;
-                                    closest = m_Manager.m_TanksPosition[i];
+                                    closest = m_Manager.m_TanksPosition[iter];
                                 }
                             }
+                            iter++;
                         }
+                        else iter++;
                     }
+                    else iter++;
                 }
             }
+            else iter++;
         }
 
         return closest;
