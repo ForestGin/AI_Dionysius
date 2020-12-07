@@ -7,7 +7,7 @@ public class TankHealth : MonoBehaviour
     public int m_TeamNumber = 1;
     public Color m_PlayerColor;
 
-    public float m_StartingHealth = 100f;          
+    public float m_StartingHealth = 500f;          
     public Slider m_Slider;                        
     public Image m_FillImage;                      
     public Color m_FullHealthColor = Color.green;  

@@ -1084,6 +1084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayerNumber: 1
+  m_TeamNumber: 1
   m_PlayerColor: {r: 0, g: 0, b: 0, a: 0}
   m_Speed: 12
   m_TurnSpeed: 180
@@ -1106,8 +1107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayerNumber: 1
+  m_TeamNumber: 1
   m_PlayerColor: {r: 0, g: 0, b: 0, a: 0}
-  m_StartingHealth: 100
+  m_StartingHealth: 500
   m_Slider: {fileID: 330352450}
   m_FillImage: {fileID: 1669603512}
   m_FullHealthColor: {r: 0, g: 1, b: 0, a: 1}
@@ -1127,6 +1129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayerNumber: 1
+  m_TeamNumber: 1
   m_PlayerColor: {r: 1, g: 1, b: 1, a: 1}
   m_Shell: {fileID: 2047011462961054255, guid: 4d698ade3ca4f6b4cbefdb5d5a15c2ef, type: 3}
   m_FireTransform: {fileID: 500766543}
