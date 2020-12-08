@@ -142,7 +142,7 @@ public class TankShooting : MonoBehaviour
 
             shellInstance.useGravity = true;
 
-            shellInstance.tag = "Projectile";
+            //shellInstance.tag = "Projectile";
 
             m_ShootingAudio.clip = m_FireClip;
             m_ShootingAudio.Play();

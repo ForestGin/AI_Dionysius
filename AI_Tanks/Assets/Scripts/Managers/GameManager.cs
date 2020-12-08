@@ -289,12 +289,12 @@ public class GameManager : MonoBehaviour
         }
 
         //Destroy all shells left
-        m_Shells = GameObject.FindGameObjectsWithTag("Projectile");
+        //m_Shells = GameObject.FindGameObjectsWithTag("Projectile");
 
-        foreach (GameObject Projectile in m_Shells)
-        {
-            Destroy(Projectile);
-        }
+        //foreach (GameObject Projectile in m_Shells)
+        //{
+        //    Destroy(Projectile);
+        //}
     }
 
     private void EnableTankControl()
