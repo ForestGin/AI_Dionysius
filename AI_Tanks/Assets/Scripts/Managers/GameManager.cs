@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     private GameObject[] m_Shells;
 
     public GameObject m_BasePrefab;
-    public GameObject m_TankPrefab;
+
+    public GameObject m_TankWanderPrefab;
+    public GameObject m_TankPatrolPrefab;
 
     public TeamManager[] m_Teams;
 
@@ -84,7 +86,12 @@ public class GameManager : MonoBehaviour
 
             for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
             {
-                m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;
+                //Spawn Patrol/Wander Tanks Variety 
+                if (iter % 2 == 0)
+                    m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankPatrolPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;               
+                else
+                    m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankWanderPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;
+                
                 m_Teams[i].m_Tanks[j].m_PlayerNumber = iter + 1;
                 m_Teams[i].m_Tanks[j].m_TeamNumber = i + 1;
                 m_Teams[i].m_Tanks[j].m_PlayerColor = m_Teams[i].m_TeamColor;
