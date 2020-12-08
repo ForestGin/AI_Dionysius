@@ -22,26 +22,26 @@ public class TankShooting : MonoBehaviour
     //Parabolic motion shooting
     public int m_RateOfFire = 1; //per second
     public bool m_ShootDelay = true;
-    private float m_ShootingTimer;
+    public float m_ShootingTimer;
 
     public float m_gravity = Physics.gravity.magnitude;
 
     public float m_InitialVelocity;
-    private float m_InitialHeight;
+    public float m_InitialHeight;
     public float m_CurrentVelocity;
     public float m_CurrentHeight;
 
     public float m_ShootingAngle;
     public int m_ShootingAngleOffset = 30;
-    
-    private float m_MaxShootingRangeAngle = 45f;
+
+    public float m_MaxShootingRangeAngle = 45f;
     public float m_MaxShootingRange;
 
     //Magazine
     public int m_InitialMagazine;
     public int m_TotalMagazine;
-    private int m_CurrentMagazine;
-    private bool m_EmptyMagazine = false;
+    public int m_CurrentMagazine;
+    public bool m_EmptyMagazine = false;
     public int m_MagazineRechargeRate;
 
 
@@ -81,44 +81,44 @@ public class TankShooting : MonoBehaviour
 
     private void Update()
     {
-        //Turret pointing at closest tank
-        m_ClosestTankPosition = GetClosestTankAlivePosition();
-        m_ClosestTankPosition.y = 1.2f;
+        ////Turret pointing at closest tank
+        //m_ClosestTankPosition = GetClosestTankAlivePosition();
+        //m_ClosestTankPosition.y = 1.2f;
 
-        m_Turret.transform.LookAt(m_ClosestTankPosition);
+        //m_Turret.transform.LookAt(m_ClosestTankPosition);
 
-        //Fire when enemy is in range
-        m_ClosestTankDistance = Vector3.Distance(m_ClosestTankPosition, m_FireTransform.position);
+        ////Fire when enemy is in range
+        //m_ClosestTankDistance = Vector3.Distance(m_ClosestTankPosition, m_FireTransform.position);
 
-        m_MaxShootingRange = CalculateShootingRange(m_MaxShootingRangeAngle, m_InitialVelocity, m_InitialHeight);
+        //m_MaxShootingRange = CalculateShootingRange(m_MaxShootingRangeAngle, m_InitialVelocity, m_InitialHeight);
 
-        if (m_ClosestTankDistance < m_MaxShootingRange)
-        {
-            m_ShootingAngle = CalculateShootingAngle(m_ClosestTankDistance, 0, m_InitialVelocity, m_InitialHeight);
+        //if (m_ClosestTankDistance < m_MaxShootingRange)
+        //{
+        //    m_ShootingAngle = CalculateShootingAngle(m_ClosestTankDistance, 0, m_InitialVelocity, m_InitialHeight);
 
-            if (!float.IsNaN(m_ShootingAngle))
-            {
-                m_Turret.transform.Rotate(-m_ShootingAngle, 0, 0);
-            }
+        //    if (!float.IsNaN(m_ShootingAngle))
+        //    {
+        //        m_Turret.transform.Rotate(-m_ShootingAngle, 0, 0);
+        //    }
 
-            //Fire Delay
-            if (m_ShootingTimer < Time.time && !float.IsNaN(m_ShootingAngle))
-            {
-                //Fire shell
-                Fire();
-                m_ShootDelay = true;
-                m_ShootingTimer = Time.time + m_RateOfFire;
-            }
+        //    //Fire Delay
+        //    if (m_ShootingTimer < Time.time && !float.IsNaN(m_ShootingAngle))
+        //    {
+        //        //Fire shell
+        //        Fire();
+        //        m_ShootDelay = true;
+        //        m_ShootingTimer = Time.time + m_RateOfFire;
+        //    }
 
-            if (!float.IsNaN(m_ShootingAngle))
-            {
-                m_Turret.transform.Rotate(m_ShootingAngleOffset, 0, 0);
-            }
-        }
-        else
-        {
-            m_Turret.transform.LookAt(m_ClosestTankPosition);
-        }
+        //    if (!float.IsNaN(m_ShootingAngle))
+        //    {
+        //        m_Turret.transform.Rotate(m_ShootingAngleOffset, 0, 0);
+        //    }
+        //}
+        //else
+        //{
+        //    m_Turret.transform.LookAt(m_ClosestTankPosition);
+        //}
         
 
     }
@@ -130,7 +130,7 @@ public class TankShooting : MonoBehaviour
         Gizmos.DrawWireSphere(m_FireTransform.position, m_MaxShootingRange);
     }
 
-    private void Fire()
+    public void Fire()
     {
         if (m_CurrentMagazine > 0)
         {
@@ -153,7 +153,7 @@ public class TankShooting : MonoBehaviour
             m_EmptyMagazine = true;
     }
 
-    private float CalculateShootingRange(float a, float v0, float h0)
+    public float CalculateShootingRange(float a, float v0, float h0)
     {
         float arad = Mathf.Deg2Rad * a;
 
@@ -161,7 +161,7 @@ public class TankShooting : MonoBehaviour
         return ((v0 * Mathf.Cos(arad)) / m_gravity) * ((v0 * Mathf.Sin(arad)) + (Mathf.Sqrt(((v0 * Mathf.Sin(arad)) * (v0 * Mathf.Sin(arad))) + (2 * m_gravity * h0))));
     }
 
-    private float CalculateShootingAngle(float x, float y, float v, float h0)
+    public float CalculateShootingAngle(float x, float y, float v, float h0)
     {
         float sqrt = (v * v * v * v) - (m_gravity * (m_gravity * (x * x) + 2 * y * (v * v)));
 
@@ -191,7 +191,7 @@ public class TankShooting : MonoBehaviour
         }
     }
 
-    private Vector3 GetClosestTankAlivePosition()
+    public Vector3 GetClosestTankAlivePosition()
     {
         float dist = -1;
         float mindist = 0;

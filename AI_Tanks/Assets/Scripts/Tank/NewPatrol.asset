@@ -15,47 +15,115 @@ MonoBehaviour:
   brickName: Assets/Scripts/Tank/NewPatrol.asset
   xml: "\uFEFF<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<BehaviorBricks xmlns:ref=\"urn:padaone\"
     version=\"1.0\">\r\n  <BehaviorTree id=\"0\" />\r\n  <runtimeInfo>\r\n    <BehaviorTree
-    id=\"0\" guid=\"a8cf2f9a7edb9f14c8442f14077d1a17\" nextId=\"5\">\r\n      <root>\r\n
+    id=\"0\" guid=\"a8cf2f9a7edb9f14c8442f14077d1a17\" nextId=\"31\">\r\n      <root>\r\n
     \       <RepeatDecorator id=\"1\" />\r\n      </root>\r\n      <inputParams />\r\n
     \     <outputParams />\r\n      <localParams />\r\n    </BehaviorTree>\r\n    <RepeatDecorator
     id=\"1\" loops=\"-1\" policy=\"ContinueWhenChildFails\">\r\n      <child>\r\n
     \       <SequenceNode id=\"4\" />\r\n      </child>\r\n      <inputParams />\r\n
     \     <outputParams />\r\n      <localParams />\r\n    </RepeatDecorator>\r\n
     \   <SequenceNode id=\"4\">\r\n      <children>\r\n        <elem>\r\n          <ActionNode
-    id=\"3\" />\r\n        </elem>\r\n        <elem>\r\n          <ActionNode id=\"2\"
-    />\r\n        </elem>\r\n      </children>\r\n      <inputParams />\r\n      <outputParams
-    />\r\n      <localParams />\r\n    </SequenceNode>\r\n    <ActionNode id=\"3\"
-    action=\"MyActions/BBRamps\">\r\n      <inputParams />\r\n      <outputParams
-    />\r\n      <localParams />\r\n    </ActionNode>\r\n    <ActionNode id=\"2\" action=\"MyActions/BBPatrol\">\r\n
-    \     <inputParams />\r\n      <outputParams />\r\n      <localParams />\r\n    </ActionNode>\r\n
+    id=\"3\" />\r\n        </elem>\r\n        <elem>\r\n          <RepeatDecorator
+    id=\"30\" />\r\n        </elem>\r\n      </children>\r\n      <inputParams />\r\n
+    \     <outputParams />\r\n      <localParams />\r\n    </SequenceNode>\r\n    <ActionNode
+    id=\"3\" action=\"MyActions/BBRamps\">\r\n      <inputParams />\r\n      <outputParams
+    />\r\n      <localParams />\r\n    </ActionNode>\r\n    <RepeatDecorator id=\"30\"
+    loops=\"-1\" policy=\"ContinueWhenChildFails\">\r\n      <child>\r\n        <PrioritySelectorNode
+    id=\"22\" />\r\n      </child>\r\n      <inputParams />\r\n      <outputParams
+    />\r\n      <localParams />\r\n    </RepeatDecorator>\r\n    <PrioritySelectorNode
+    id=\"22\">\r\n      <children>\r\n        <elem>\r\n          <GuardAndNode>\r\n
+    \           <guard>\r\n              <ConditionEvalNode id=\"28\" />\r\n            </guard>\r\n
+    \           <child>\r\n              <ParallelNode id=\"27\" />\r\n            </child>\r\n
+    \         </GuardAndNode>\r\n        </elem>\r\n        <elem>\r\n          <GuardAndNode>\r\n
+    \           <guard>\r\n              <ConditionEvalNode id=\"29\" />\r\n            </guard>\r\n
+    \           <child>\r\n              <ActionNode id=\"18\" />\r\n            </child>\r\n
+    \         </GuardAndNode>\r\n        </elem>\r\n      </children>\r\n      <inputParams
+    />\r\n      <outputParams />\r\n      <localParams />\r\n    </PrioritySelectorNode>\r\n
+    \   <ConditionEvalNode id=\"28\" policy=\"WAIT_UNTIL_FALSE_AND_FAIL\" name=\"MyConditions/BBShootCondition\">\r\n
+    \     <inputParams />\r\n      <outputParams />\r\n      <localParams />\r\n    </ConditionEvalNode>\r\n
+    \   <ParallelNode id=\"27\" policy=\"AndPolicy\">\r\n      <children>\r\n        <elem>\r\n
+    \         <ActionNode id=\"2\" />\r\n        </elem>\r\n        <elem>\r\n          <ActionNode
+    id=\"20\" />\r\n        </elem>\r\n      </children>\r\n      <inputParams />\r\n
+    \     <outputParams />\r\n      <localParams />\r\n    </ParallelNode>\r\n    <ConditionEvalNode
+    id=\"29\" policy=\"WAIT_UNTIL_TRUE_AND_COMPLETE\" name=\"MyConditions/BBFullMagazineCondition\">\r\n
+    \     <inputParams />\r\n      <outputParams />\r\n      <localParams />\r\n    </ConditionEvalNode>\r\n
+    \   <ActionNode id=\"18\" action=\"MyActions/BBRamps\">\r\n      <inputParams
+    />\r\n      <outputParams />\r\n      <localParams />\r\n    </ActionNode>\r\n
+    \   <ActionNode id=\"2\" action=\"MyActions/BBPatrol\">\r\n      <inputParams
+    />\r\n      <outputParams />\r\n      <localParams />\r\n    </ActionNode>\r\n
+    \   <ActionNode id=\"20\" action=\"MyActions/BBShooting\">\r\n      <inputParams
+    />\r\n      <outputParams />\r\n      <localParams />\r\n    </ActionNode>\r\n
     \ </runtimeInfo>\r\n  <editorInfo>\r\n    <BehaviorTree id=\"0\" _name=\"NewPatrol\"
     _description=\"\" _removeIfClosed=\"False\">\r\n      <_rootList>\r\n        <elem>\r\n
     \         <RepeatDecorator id=\"1\" />\r\n        </elem>\r\n        <elem>\r\n
     \         <ActionNode id=\"2\" />\r\n        </elem>\r\n        <elem>\r\n          <ActionNode
     id=\"3\" />\r\n        </elem>\r\n        <elem>\r\n          <SequenceNode id=\"4\"
-    />\r\n        </elem>\r\n      </_rootList>\r\n      <_nodes>\r\n        <nodes>\r\n
-    \         <RepeatDecorator id=\"1\" />\r\n          <ActionNode id=\"2\" />\r\n
-    \         <ActionNode id=\"3\" />\r\n          <SequenceNode id=\"4\" />\r\n        </nodes>\r\n
-    \     </_nodes>\r\n    </BehaviorTree>\r\n    <RepeatDecorator id=\"1\">\r\n      <_data>\r\n
-    \       <data breakpoint=\"0\" selected=\"False\" position=\"557 55\" name=\"Repeat\"
-    description=\"Repeats the execution of its child node\" cardinality=\"1\" hasParent=\"False\">\r\n
-    \         <BehaviorTree id=\"0\" />\r\n          <RepeatDecorator id=\"1\" />\r\n
-    \       </data>\r\n      </_data>\r\n    </RepeatDecorator>\r\n    <SequenceNode
-    id=\"4\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
-    position=\"492 163\" name=\"Sequence\" description=\"Executes all its children
-    in sequence until all of them are successful\" cardinality=\"-1\" hasParent=\"True\">\r\n
-    \         <BehaviorTree id=\"0\" />\r\n          <SequenceNode id=\"4\" />\r\n
-    \         <RepeatDecorator id=\"1\" />\r\n        </data>\r\n      </_data>\r\n
-    \   </SequenceNode>\r\n    <ActionNode id=\"3\">\r\n      <_data>\r\n        <data
-    breakpoint=\"0\" selected=\"False\" position=\"331 293\" name=\"MyActions/BBRamps\"
-    description=\"Ramp movement done with BB\" cardinality=\"0\" hasParent=\"True\">\r\n
-    \         <BehaviorTree id=\"0\" />\r\n          <ActionNode id=\"3\" />\r\n          <SequenceNode
-    id=\"4\" />\r\n        </data>\r\n      </_data>\r\n    </ActionNode>\r\n    <ActionNode
-    id=\"2\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
-    position=\"600 300\" name=\"MyActions/BBPatrol\" description=\"Patrol done with
-    BB\" cardinality=\"0\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\"
-    />\r\n          <ActionNode id=\"2\" />\r\n          <SequenceNode id=\"4\" />\r\n
-    \       </data>\r\n      </_data>\r\n    </ActionNode>\r\n  </editorInfo>\r\n</BehaviorBricks>"
-  zoom: 1
+    />\r\n        </elem>\r\n        <elem>\r\n          <ActionNode id=\"18\" />\r\n
+    \       </elem>\r\n        <elem>\r\n          <ActionNode id=\"20\" />\r\n        </elem>\r\n
+    \       <elem>\r\n          <PrioritySelectorNode id=\"22\" />\r\n        </elem>\r\n
+    \       <elem>\r\n          <ParallelNode id=\"27\" />\r\n        </elem>\r\n
+    \       <elem>\r\n          <ConditionEvalNode id=\"28\" />\r\n        </elem>\r\n
+    \       <elem>\r\n          <ConditionEvalNode id=\"29\" />\r\n        </elem>\r\n
+    \       <elem>\r\n          <RepeatDecorator id=\"30\" />\r\n        </elem>\r\n
+    \     </_rootList>\r\n      <_nodes>\r\n        <nodes>\r\n          <RepeatDecorator
+    id=\"1\" />\r\n          <ActionNode id=\"2\" />\r\n          <ActionNode id=\"3\"
+    />\r\n          <SequenceNode id=\"4\" />\r\n          <ConditionEvalNode id=\"29\"
+    />\r\n          <ActionNode id=\"20\" />\r\n          <ConditionEvalNode id=\"28\"
+    />\r\n          <ActionNode id=\"18\" />\r\n          <ParallelNode id=\"27\"
+    />\r\n          <PrioritySelectorNode id=\"22\" />\r\n          <RepeatDecorator
+    id=\"30\" />\r\n        </nodes>\r\n      </_nodes>\r\n    </BehaviorTree>\r\n
+    \   <RepeatDecorator id=\"1\">\r\n      <_data>\r\n        <data breakpoint=\"0\"
+    selected=\"False\" position=\"1110.343 -40.1152\" name=\"Repeat\" description=\"Repeats
+    the execution of its child node\" cardinality=\"1\" hasParent=\"False\">\r\n          <BehaviorTree
+    id=\"0\" />\r\n          <RepeatDecorator id=\"1\" />\r\n        </data>\r\n      </_data>\r\n
+    \   </RepeatDecorator>\r\n    <SequenceNode id=\"4\">\r\n      <_data>\r\n        <data
+    breakpoint=\"0\" selected=\"False\" position=\"1129.343 76.8849\" name=\"Sequence\"
+    description=\"Executes all its children in sequence until all of them are successful\"
+    cardinality=\"-1\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\" />\r\n
+    \         <SequenceNode id=\"4\" />\r\n          <RepeatDecorator id=\"1\" />\r\n
+    \       </data>\r\n      </_data>\r\n    </SequenceNode>\r\n    <ActionNode id=\"3\">\r\n
+    \     <_data>\r\n        <data breakpoint=\"0\" selected=\"False\" position=\"838.3435
+    167.8849\" name=\"MyActions/BBRamps\" description=\"Ramp movement done with BB\"
+    cardinality=\"0\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\" />\r\n
+    \         <ActionNode id=\"3\" />\r\n          <SequenceNode id=\"4\" />\r\n        </data>\r\n
+    \     </_data>\r\n    </ActionNode>\r\n    <RepeatDecorator id=\"30\">\r\n      <_data>\r\n
+    \       <data breakpoint=\"0\" selected=\"False\" position=\"1371.5 93.5\" name=\"Repeat\"
+    description=\"Repeats the execution of its child node\" cardinality=\"1\" hasParent=\"True\">\r\n
+    \         <BehaviorTree id=\"0\" />\r\n          <RepeatDecorator id=\"30\" />\r\n
+    \         <SequenceNode id=\"4\" />\r\n        </data>\r\n      </_data>\r\n    </RepeatDecorator>\r\n
+    \   <PrioritySelectorNode id=\"22\">\r\n      <_data>\r\n        <data breakpoint=\"0\"
+    selected=\"False\" position=\"1431.667 198.0952\" name=\"Priority Selector\" description=\"\"
+    cardinality=\"1\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\" />\r\n
+    \         <PrioritySelectorNode id=\"22\" />\r\n          <RepeatDecorator id=\"30\"
+    />\r\n        </data>\r\n      </_data>\r\n    </PrioritySelectorNode>\r\n    <ConditionEvalNode
+    id=\"28\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
+    position=\"1670.328 406.6122\" name=\"MyConditions/BBShootCondition\" description=\"Eval\"
+    cardinality=\"1\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\" />\r\n
+    \         <ConditionEvalNode id=\"28\" />\r\n          <PrioritySelectorNode id=\"22\"
+    />\r\n        </data>\r\n      </_data>\r\n    </ConditionEvalNode>\r\n    <ParallelNode
+    id=\"27\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
+    position=\"1212.983 315.9999\" name=\"Parallel\" description=\"Executes all its
+    children in parallel until all of them are successful\" cardinality=\"-1\" hasParent=\"False\">\r\n
+    \         <BehaviorTree id=\"0\" />\r\n          <ParallelNode id=\"27\" />\r\n
+    \       </data>\r\n      </_data>\r\n    </ParallelNode>\r\n    <ConditionEvalNode
+    id=\"29\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
+    position=\"2255.961 569.0221\" name=\"MyConditions/BBFullMagazineCondition\" description=\"Eval\"
+    cardinality=\"1\" hasParent=\"True\">\r\n          <BehaviorTree id=\"0\" />\r\n
+    \         <ConditionEvalNode id=\"29\" />\r\n          <PrioritySelectorNode id=\"22\"
+    />\r\n        </data>\r\n      </_data>\r\n    </ConditionEvalNode>\r\n    <ActionNode
+    id=\"18\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
+    position=\"1639.725 423.9441\" name=\"MyActions/BBRamps\" description=\"Ramp movement
+    done with BB\" cardinality=\"0\" hasParent=\"False\">\r\n          <BehaviorTree
+    id=\"0\" />\r\n          <ActionNode id=\"18\" />\r\n        </data>\r\n      </_data>\r\n
+    \   </ActionNode>\r\n    <ActionNode id=\"2\">\r\n      <_data>\r\n        <data
+    breakpoint=\"0\" selected=\"False\" position=\"975.7244 545.8492\" name=\"MyActions/BBPatrol\"
+    description=\"Patrol done with BB\" cardinality=\"0\" hasParent=\"True\">\r\n
+    \         <BehaviorTree id=\"0\" />\r\n          <ActionNode id=\"2\" />\r\n          <ParallelNode
+    id=\"27\" />\r\n        </data>\r\n      </_data>\r\n    </ActionNode>\r\n    <ActionNode
+    id=\"20\">\r\n      <_data>\r\n        <data breakpoint=\"0\" selected=\"False\"
+    position=\"1308.412 571.3013\" name=\"MyActions/BBShooting\" description=\"Shooting
+    done with BB\" cardinality=\"0\" hasParent=\"True\">\r\n          <BehaviorTree
+    id=\"0\" />\r\n          <ActionNode id=\"20\" />\r\n          <ParallelNode id=\"27\"
+    />\r\n        </data>\r\n      </_data>\r\n    </ActionNode>\r\n  </editorInfo>\r\n</BehaviorBricks>"
+  zoom: 0.5
   subslist: []
   _guid: a8cf2f9a7edb9f14c8442f14077d1a17

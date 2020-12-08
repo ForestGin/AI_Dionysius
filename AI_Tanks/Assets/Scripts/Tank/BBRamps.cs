@@ -22,6 +22,7 @@ namespace BBUnity.Actions
         public GameObject[] rampChildren;
         public GameObject Ramp;
         public TankMovement tankManager;
+        public TankShooting tankShooting;
 
         public override void OnStart()
         {
@@ -33,6 +34,8 @@ namespace BBUnity.Actions
             Ramp = GameObject.Find("RampPoints");
             rampChildren = new GameObject[Ramp.transform.childCount];
 
+            tankShooting = gameObject.GetComponent<TankShooting>();
+
             for (int i = 0; i < Ramp.transform.childCount; i++)
             {
                 rampChildren[i] = Ramp.transform.GetChild(i).gameObject;
@@ -43,6 +46,7 @@ namespace BBUnity.Actions
 
         public override TaskStatus OnUpdate()
         {
+            Tank.speed = 3.5f;
 
             if (tankManager.m_TeamNumber == 1)
                 Tank.destination = rampChildren[1].transform.position;
@@ -55,7 +59,11 @@ namespace BBUnity.Actions
 
             if (Tank.destination.x + 3 >= gameObject.transform.position.x && Tank.destination.x - 3 <= gameObject.transform.position.x
                 && Tank.destination.z + 3 >= gameObject.transform.position.z && Tank.destination.z - 3 <= gameObject.transform.position.z)
+            {
+                tankShooting.m_CurrentMagazine = 10;
+                tankShooting.m_EmptyMagazine = false;
                 return TaskStatus.COMPLETED;
+            }
             else
                 return TaskStatus.RUNNING;
 

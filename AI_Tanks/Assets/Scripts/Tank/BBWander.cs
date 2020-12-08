@@ -71,7 +71,7 @@ namespace BBUnity.Actions
 
             }
 
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.W))
             {
 
                 if (debug)
