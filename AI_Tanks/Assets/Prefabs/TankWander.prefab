@@ -1148,6 +1148,9 @@ MonoBehaviour:
   m_ShootingAngle: 0
   m_ShootingAngleOffset: 20
   m_MaxShootingRange: 0
+  m_InitialMagazine: 10
+  m_TotalMagazine: 10
+  m_MagazineRechargeRate: 0
 --- !u!195 &-3319545269987470681
 NavMeshAgent:
   m_ObjectHideFlags: 0

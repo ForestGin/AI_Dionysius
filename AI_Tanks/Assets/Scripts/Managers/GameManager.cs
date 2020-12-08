@@ -25,10 +25,6 @@ public class GameManager : MonoBehaviour
     public bool[] m_TanksDead;
     public int m_TotalTanks = 0;
 
-    public int m_InitialTankShellsMagazine;
-    public int m_TotalTankShellsMagazine;
-    public int m_TankShellMagazineRechargeRate;
-
     private int m_RoundNumber;              
     private WaitForSeconds m_StartWait;     
     private WaitForSeconds m_EndWait;    

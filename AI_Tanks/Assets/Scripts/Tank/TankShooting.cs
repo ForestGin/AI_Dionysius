@@ -11,8 +11,7 @@ public class TankShooting : MonoBehaviour
     public Transform m_FireTransform;              
     public AudioSource m_ShootingAudio;      
     public AudioClip m_FireClip;            
-    
-
+   
     //Shooting direction
     [HideInInspector]public GameObject m_Turret;
 
@@ -37,7 +36,14 @@ public class TankShooting : MonoBehaviour
     
     private float m_MaxShootingRangeAngle = 45f;
     public float m_MaxShootingRange;
-    
+
+    //Magazine
+    public int m_InitialMagazine;
+    public int m_TotalMagazine;
+    private int m_CurrentMagazine;
+    private bool m_EmptyMagazine = false;
+    public int m_MagazineRechargeRate;
+
 
     private void OnEnable()
     {
@@ -68,6 +74,8 @@ public class TankShooting : MonoBehaviour
         m_MaxShootingRange = CalculateShootingRange(m_MaxShootingRangeAngle, m_InitialVelocity, m_InitialHeight);
 
         m_ShootingAngle = CalculateShootingAngle(m_ClosestTankDistance, 0, m_InitialVelocity, m_InitialHeight);
+
+        m_CurrentMagazine = m_InitialMagazine;
     }
     
 
@@ -124,18 +132,25 @@ public class TankShooting : MonoBehaviour
 
     private void Fire()
     {
-        // Instantiate and launch the shell.
+        if (m_CurrentMagazine > 0)
+        {
+            // Instantiate and launch the shell.
 
-        Rigidbody shellInstance = Instantiate(m_Shell, m_FireTransform.position, m_Turret.transform.rotation) as Rigidbody;
+            Rigidbody shellInstance = Instantiate(m_Shell, m_FireTransform.position, m_Turret.transform.rotation) as Rigidbody;
 
-        shellInstance.velocity = m_InitialVelocity * m_Turret.transform.forward;
+            shellInstance.velocity = m_InitialVelocity * m_Turret.transform.forward;
 
-        shellInstance.useGravity = true;
+            shellInstance.useGravity = true;
 
-        shellInstance.tag = "Projectile";
+            shellInstance.tag = "Projectile";
 
-        m_ShootingAudio.clip = m_FireClip;
-        m_ShootingAudio.Play();
+            m_ShootingAudio.clip = m_FireClip;
+            m_ShootingAudio.Play();
+
+            m_CurrentMagazine--;
+        }
+        else
+            m_EmptyMagazine = true;
     }
 
     private float CalculateShootingRange(float a, float v0, float h0)
