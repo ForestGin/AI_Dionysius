@@ -8,22 +8,29 @@ public class GameManager : MonoBehaviour
     public int m_NumRoundsToWin = 5;        
     public float m_StartDelay = 3f;         
     public float m_EndDelay = 3f;           
-    public CameraControl m_CameraControl;   
+    public CameraControl m_CameraControl; 
+    
     public Text m_MessageText;              
-    public GameObject m_TankPrefab;         
-    public TankManager[] m_Tanks;
 
     private GameObject[] m_Shells;
 
+    public GameObject m_BasePrefab;
+
+    public GameObject m_TankWanderPrefab;
+    public GameObject m_TankPatrolPrefab;
+
+    public TeamManager[] m_Teams;
+
     public Vector3[] m_TanksPosition;
     public bool[] m_TanksDead;
-
+    public int m_TotalTanks = 0;
 
     private int m_RoundNumber;              
     private WaitForSeconds m_StartWait;     
-    private WaitForSeconds m_EndWait;       
-    private TankManager m_RoundWinner;
-    private TankManager m_GameWinner;  
+    private WaitForSeconds m_EndWait;    
+    
+    private TeamManager m_RoundWinner;
+    private TeamManager m_GameWinner;  
 
 
     private void Start()
@@ -32,10 +39,12 @@ public class GameManager : MonoBehaviour
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
         //Initializing the position array with the number of tanks
-        m_TanksPosition = new Vector3[m_Tanks.Length];
-        m_TanksDead = new bool[m_Tanks.Length];
+        m_TotalTanks = CountAllTanks();
 
-        SpawnAllTanks();
+        m_TanksPosition = new Vector3[m_TotalTanks];
+        m_TanksDead = new bool[m_TotalTanks];
+
+        SpawnAllTeams();
         GetTanksPosition();
         SetCameraTargets();
 
@@ -48,35 +57,78 @@ public class GameManager : MonoBehaviour
         //GetTanksDead(); //Set from Tank health
     }
 
-
-    private void SpawnAllTanks()
+    private int CountAllTanks()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
-        {
-            m_Tanks[i].m_Instance = Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
-            m_Tanks[i].m_PlayerNumber = i + 1;
+        int TotalTanks = 0;
 
-            m_Tanks[i].Setup();
+        for (int i = 0; i < m_Teams.Length; i++)
+        {
+            TotalTanks += m_Teams[i].m_Tanks.Length;
+        }
+        return TotalTanks;
+    }
+
+    private void SpawnAllTeams()
+    {
+        int iter = 0;
+        //int ambulanceiter = 0;
+
+        for (int i = 0; i < m_Teams.Length; i++)
+        {
+            m_Teams[i].m_Instance = Instantiate(m_BasePrefab, m_Teams[i].m_BasePosition.position, m_Teams[i].m_BasePosition.rotation) as GameObject;
+            m_Teams[i].m_TeamNumber = i + 1;
+
+            m_Teams[i].Setup();
+
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                //Spawn Patrol/Wander Tanks Variety 
+                if (iter % 2 == 0)
+                    m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankPatrolPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;               
+                else
+                    m_Teams[i].m_Tanks[j].m_Instance = Instantiate(m_TankWanderPrefab, m_Teams[i].m_Tanks[j].m_SpawnPoint.position, m_Teams[i].m_Tanks[j].m_SpawnPoint.rotation) as GameObject;
+                
+                m_Teams[i].m_Tanks[j].m_PlayerNumber = iter + 1;
+                m_Teams[i].m_Tanks[j].m_TeamNumber = i + 1;
+                m_Teams[i].m_Tanks[j].m_PlayerColor = m_Teams[i].m_TeamColor;
+
+                m_Teams[i].m_Tanks[j].Setup();
+
+                iter++;
+            }
+
+            //Another "for" ambulances
         }
     }
 
     private void GetTanksPosition()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
-        {
-            //Fill array of vec3 positions for every tank (m_PlayerNumber - i)
-            m_TanksPosition[i] = m_Tanks[i].m_Instance.transform.position;
+        int iter = 0;
 
+        //Fill array of vec3 positions for every tank on every team (m_PlayerNumber - i)
+        for (int i = 0; i < m_Teams.Length; i++)
+        {
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                m_TanksPosition[iter] = m_Teams[i].m_Tanks[j].m_Instance.transform.position;
+                iter++;
+            }             
         }
     }
 
     private void SetCameraTargets()
     {
-        Transform[] targets = new Transform[m_Tanks.Length];
+        Transform[] targets = new Transform[m_TotalTanks];
+        int iter = 0;
 
-        for (int i = 0; i < targets.Length; i++)
+        //Fill array of transforms for every tank on every team
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            targets[i] = m_Tanks[i].m_Instance.transform;
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                targets[iter] = m_Teams[i].m_Tanks[j].m_Instance.transform;
+                iter++;
+            }  
         }
 
         m_CameraControl.m_Targets = targets;
@@ -102,7 +154,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundStarting()
     {
-        ResetAllTanks();
+        ResetAllTeams();
         DisableTankControl();
 
         m_CameraControl.SetStartPositionAndSize();
@@ -120,7 +172,7 @@ public class GameManager : MonoBehaviour
 
         m_MessageText.text = string.Empty;
 
-        while(!OneTankLeft())
+        while(!OneTeamLeft())
         {
             yield return null;
         }
@@ -148,37 +200,49 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private bool OneTankLeft()
+    private bool OneTeamLeft()
     {
-        int numTanksLeft = 0;
+        int numTeamsLeft = 0;
+        int numTanksLeftInTeam = 0;
 
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            if (m_Tanks[i].m_Instance.activeSelf)
-                numTanksLeft++;
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                if (m_Teams[i].m_Tanks[j].m_Instance.activeSelf)
+                    numTanksLeftInTeam++;
+            }
+
+            if (numTanksLeftInTeam > 0)
+                numTeamsLeft++;
+
+            numTanksLeftInTeam = 0;
         }
 
-        return numTanksLeft <= 1;
+        return numTeamsLeft <= 1;
     }
 
-    private TankManager GetRoundWinner()
+    private TeamManager GetRoundWinner()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            if (m_Tanks[i].m_Instance.activeSelf)
-                return m_Tanks[i];
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                if (m_Teams[i].m_Tanks[j].m_Instance.activeSelf)
+                    return m_Teams[i];
+            }
         }
 
         return null;
     }
 
 
-    private TankManager GetGameWinner()
+    private TeamManager GetGameWinner()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
-                return m_Tanks[i];
+            if (m_Teams[i].m_Wins == m_NumRoundsToWin)
+                return m_Teams[i];
         }
 
         return null;
@@ -190,56 +254,62 @@ public class GameManager : MonoBehaviour
         string message = "DRAW!";
 
         if (m_RoundWinner != null)
-            message = m_RoundWinner.m_ColoredPlayerText + " WINS THE ROUND!";
+            message = m_RoundWinner.m_ColoredTeamText + " WINS THE ROUND!";
 
         message += "\n\n\n\n";
 
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            message += m_Tanks[i].m_ColoredPlayerText + ": " + m_Tanks[i].m_Wins + " WINS\n";
+            message += m_Teams[i].m_ColoredTeamText + ": " + m_Teams[i].m_Wins + " WINS\n";
         }
 
         if (m_GameWinner != null)
-            message = m_GameWinner.m_ColoredPlayerText + " WINS THE GAME!";
+            message = m_GameWinner.m_ColoredTeamText + " WINS THE GAME!";
 
         return message;
     }
 
-    private void ResetAllTanks()
+    private void ResetAllTeams()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        //Reset
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            m_Tanks[i].Reset();
+            m_Teams[i].Reset();
         }
 
-        for (int i = 0; i < m_Tanks.Length; i++)
+        int iter = 0;
+        //Reset Death array bools
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            m_TanksDead[i] = false;
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                m_TanksDead[iter] = false;
+                iter++;
+            }
         }
 
-        m_Shells = GameObject.FindGameObjectsWithTag("Projectile");
+        //Destroy all shells left
+        //m_Shells = GameObject.FindGameObjectsWithTag("Projectile");
 
-        foreach (GameObject Projectile in m_Shells)
-        {
-            Destroy(Projectile);
-        }
+        //foreach (GameObject Projectile in m_Shells)
+        //{
+        //    Destroy(Projectile);
+        //}
     }
-
 
     private void EnableTankControl()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            m_Tanks[i].EnableControl();
+            m_Teams[i].EnableControl();
         }
     }
 
-
     private void DisableTankControl()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        for (int i = 0; i < m_Teams.Length; i++)
         {
-            m_Tanks[i].DisableControl();
+            m_Teams[i].DisableControl();
         }
     }
 }

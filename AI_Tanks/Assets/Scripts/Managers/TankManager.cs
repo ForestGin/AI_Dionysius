@@ -4,9 +4,11 @@ using UnityEngine;
 [Serializable]
 public class TankManager
 {
-    public Color m_PlayerColor;            
-    public Transform m_SpawnPoint;         
-    [HideInInspector] public int m_PlayerNumber;             
+    [HideInInspector] public Color m_PlayerColor;            
+    public Transform m_SpawnPoint;       
+    
+    [HideInInspector] public int m_PlayerNumber;
+    [HideInInspector] public int m_TeamNumber;
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
     [HideInInspector] public int m_Wins;
@@ -27,14 +29,17 @@ public class TankManager
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Movement.m_PlayerColor = m_PlayerColor;
+        m_Movement.m_TeamNumber = m_TeamNumber;
 
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerColor = m_PlayerColor;
+        m_Shooting.m_TeamNumber = m_TeamNumber;
 
         m_Health.m_PlayerNumber = m_PlayerNumber;
         m_Health.m_PlayerColor = m_PlayerColor;
+        m_Health.m_TeamNumber = m_TeamNumber;
 
-        m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
+        //m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
         MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
 
