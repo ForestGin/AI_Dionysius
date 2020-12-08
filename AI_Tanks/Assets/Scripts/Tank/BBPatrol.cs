@@ -16,8 +16,7 @@ namespace BBUnity.Actions
     [Help("Patrol done with BB")]
     public class BBPatrol : GOAction
     {
-        //public TankMovement tankmovement;
-        public GameObject vehicle;
+        
 
         public UnityEngine.AI.NavMeshAgent Tank;
         public UnityEngine.AI.NavMeshPath path;
@@ -38,7 +37,6 @@ namespace BBUnity.Actions
 
         public override void OnStart()
         {
-            vehicle = GameObject.Find("vehiculo");
             path = new NavMeshPath();
             Tank = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();//navagent
                                                                           

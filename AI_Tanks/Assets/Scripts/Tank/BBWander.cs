@@ -43,7 +43,7 @@ namespace BBUnity.Actions
 
         public override void OnStart()
         {
-            //vehicle = GameObject.Find("vehiculo");//asignar a tanks, ahora solo esta haciendolo el vehiculo
+            
             path = new NavMeshPath();
             Tank = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();//navagent
             //path = Tank.path;//nav path
