@@ -44,11 +44,11 @@ public class TeamManager
 
         m_ColoredTeamText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_TeamColor) + ">TEAM " + m_TeamNumber + "</color>";
 
-        //MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
+        MeshRenderer baserenderer = m_Instance.GetComponentInChildren<MeshRenderer>();
 
         //for (int i = 0; i < renderers.Length; i++)
         //{
-        //    renderers[i].material.color = m_PlayerColor;
+            baserenderer/*[i]*/.material.color = m_TeamColor;
         //}
     }
 

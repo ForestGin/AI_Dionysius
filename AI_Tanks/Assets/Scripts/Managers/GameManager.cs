@@ -200,11 +200,20 @@ public class GameManager : MonoBehaviour
     private bool OneTeamLeft()
     {
         int numTeamsLeft = 0;
+        int numTanksLeftInTeam = 0;
 
         for (int i = 0; i < m_Teams.Length; i++)
         {
-            if (m_Teams[i].m_Instance.activeSelf)
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                if (m_Teams[i].m_Tanks[j].m_Instance.activeSelf)
+                    numTanksLeftInTeam++;
+            }
+
+            if (numTanksLeftInTeam > 0)
                 numTeamsLeft++;
+
+            numTanksLeftInTeam = 0;
         }
 
         return numTeamsLeft <= 1;
@@ -214,8 +223,11 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < m_Teams.Length; i++)
         {
-            if (m_Teams[i].m_Instance.activeSelf)
-                return m_Teams[i];
+            for (int j = 0; j < m_Teams[i].m_Tanks.Length; j++)
+            {
+                if (m_Teams[i].m_Tanks[j].m_Instance.activeSelf)
+                    return m_Teams[i];
+            }
         }
 
         return null;

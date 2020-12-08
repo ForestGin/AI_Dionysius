@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_PlayerNumber: 1
   m_TeamNumber: 1
   m_PlayerColor: {r: 0, g: 0, b: 0, a: 0}
-  m_StartingHealth: 100
+  m_StartingHealth: 500
   m_Slider: {fileID: 330352450}
   m_FillImage: {fileID: 1669603512}
   m_FullHealthColor: {r: 0, g: 1, b: 0, a: 1}
