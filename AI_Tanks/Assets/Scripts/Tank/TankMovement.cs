@@ -79,38 +79,38 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-        trailRenderer = GetComponent<LineRenderer>();
+        //trailRenderer = GetComponent<LineRenderer>();
 
-        //Tank Agent
-        path = new NavMeshPath();
-        Tank = GetComponent<NavMeshAgent>();
+        ////Tank Agent
+        //path = new NavMeshPath();
+        //Tank = GetComponent<NavMeshAgent>();
 
-        //Wander frontiers
-        TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
-        BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
-        LeftFrontier = GameObject.Find("LeftFrontier").GetComponent<Transform>();
-        RightFrontier = GameObject.Find("RightFrontier").GetComponent<Transform>();
+        ////Wander frontiers
+        //TopFrontier = GameObject.Find("TopFrontier").GetComponent<Transform>();
+        //BotFrontier = GameObject.Find("BotFrontier").GetComponent<Transform>();
+        //LeftFrontier = GameObject.Find("LeftFrontier").GetComponent<Transform>();
+        //RightFrontier = GameObject.Find("RightFrontier").GetComponent<Transform>();
 
-        //Wander
-        if (m_PlayerNumber % 2 == 0) //Even number players
-        {
-            Wander();
-        }
+        ////Wander
+        //if (m_PlayerNumber % 2 == 0) //Even number players
+        //{
+        //    Wander();
+        //}
 
-        //Patrol Points
-        Points = GameObject.Find("Points");
-        pointChildren = new GameObject[Points.transform.childCount];
+        ////Patrol Points
+        //Points = GameObject.Find("Points");
+        //pointChildren = new GameObject[Points.transform.childCount];
 
-        for (int i = 0; i < Points.transform.childCount; i++)
-        {
-            pointChildren[i] = Points.transform.GetChild(i).gameObject;
-        }
+        //for (int i = 0; i < Points.transform.childCount; i++)
+        //{
+        //    pointChildren[i] = Points.transform.GetChild(i).gameObject;
+        //}
 
-        //Patrol
-        if (m_PlayerNumber % 2 == 1) //Odd number players
-        {
-            Patrol();
-        }
+        ////Patrol
+        //if (m_PlayerNumber % 2 == 1) //Odd number players
+        //{
+        //    Patrol();
+        //}
 
 
         ////Bases
@@ -143,64 +143,64 @@ public class TankMovement : MonoBehaviour
 
         //}
 
-        if (Input.GetKeyDown(KeyCode.B))//test to check bases position and tank asignation
-        {
+        //if (Input.GetKeyDown(KeyCode.B))//test to check bases position and tank asignation
+        //{
 
-            GotoBases();
+        //    GotoBases();
          
-        }
+        //}
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
 
-            if (debug)
-            {
-                debug = false;
-            }
-            else
-                debug = true;
-        }
+        //    if (debug)
+        //    {
+        //        debug = false;
+        //    }
+        //    else
+        //        debug = true;
+        //}
        
 
-        if(Tank.hasPath && debug)
-        {
-            trailRenderer.positionCount = Tank.path.corners.Length;
-            trailRenderer.SetPositions(Tank.path.corners);
-            trailRenderer.enabled = true;
-        }
-        else
-        {
-            trailRenderer.enabled = false;
-        }
+        //if(Tank.hasPath && debug)
+        //{
+        //    trailRenderer.positionCount = Tank.path.corners.Length;
+        //    trailRenderer.SetPositions(Tank.path.corners);
+        //    trailRenderer.enabled = true;
+        //}
+        //else
+        //{
+        //    trailRenderer.enabled = false;
+        //}
 
-        //wander logic and acceleration
-        if (m_PlayerNumber % 2 == 0)
-        {
+        ////wander logic and acceleration
+        //if (m_PlayerNumber % 2 == 0)
+        //{
            
-            if ((transform.position - Tank.destination).magnitude <= 3f && Tank.speed > 1f)
-            {
-                Tank.speed -= breakforce;
-            }
+        //    if ((transform.position - Tank.destination).magnitude <= 3f && Tank.speed > 1f)
+        //    {
+        //        Tank.speed -= breakforce;
+        //    }
 
-            if ((transform.position - Tank.destination).magnitude <= Tank.stoppingDistance)
-            {
-                Tank.speed = speed;
-                Wander();
-            }
-        }
+        //    if ((transform.position - Tank.destination).magnitude <= Tank.stoppingDistance)
+        //    {
+        //        Tank.speed = speed;
+        //        Wander();
+        //    }
+        //}
 
-        //patrol
-        if (m_PlayerNumber %2 == 1)
-        {
-            if (!Tank.pathPending && Tank.remainingDistance <= 3f)
-                Tank.speed -= breakforce;
+        ////patrol
+        //if (m_PlayerNumber %2 == 1)
+        //{
+        //    if (!Tank.pathPending && Tank.remainingDistance <= 3f)
+        //        Tank.speed -= breakforce;
 
-            if (!Tank.pathPending && Tank.remainingDistance <= 1f)
-            {
-                Patrol();
-                Tank.speed = speed;
-            }
-        }
+        //    if (!Tank.pathPending && Tank.remainingDistance <= 1f)
+        //    {
+        //        Patrol();
+        //        Tank.speed = speed;
+        //    }
+        //}
 
         //Setting Target Image position
         //m_ImageTarget.transform.position = Vector3.zero;/*new Vector3(Tank.destination.x, 0.1f, Tank.destination.z);*/
@@ -258,104 +258,104 @@ public class TankMovement : MonoBehaviour
         m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
     }
 
-    private void Wander()
-    {
-        Tank.angularSpeed = 200f;
-        wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
-        wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
-        //transform.LookAt(wayPoint);
+    //private void Wander()
+    //{
+    //    Tank.angularSpeed = 200f;
+    //    wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
+    //    wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+    //    //transform.LookAt(wayPoint);
 
-        if (wayPoint.x > LeftFrontier.position.x && wayPoint.x < RightFrontier.position.x && wayPoint.z < TopFrontier.position.z && wayPoint.z > BotFrontier.position.z)
-        {
-            Tank.destination = wayPoint;
-            walkable = Tank.CalculatePath(Tank.destination, path);//returns true if path is find
-        }
-        else if(wayPoint.x < LeftFrontier.position.x && wayPoint.x > RightFrontier.position.x && wayPoint.z > TopFrontier.position.z && wayPoint.z < BotFrontier.position.z)
-        {
-            wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
-            wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
-            //transform.LookAt(wayPoint);
+    //    if (wayPoint.x > LeftFrontier.position.x && wayPoint.x < RightFrontier.position.x && wayPoint.z < TopFrontier.position.z && wayPoint.z > BotFrontier.position.z)
+    //    {
+    //        Tank.destination = wayPoint;
+    //        walkable = Tank.CalculatePath(Tank.destination, path);//returns true if path is find
+    //    }
+    //    else if(wayPoint.x < LeftFrontier.position.x && wayPoint.x > RightFrontier.position.x && wayPoint.z > TopFrontier.position.z && wayPoint.z < BotFrontier.position.z)
+    //    {
+    //        wayPoint.x = Random.Range(transform.position.x - Range, transform.position.x + Range);
+    //        wayPoint.z = Random.Range(transform.position.z - Range, transform.position.z + Range);
+    //        //transform.LookAt(wayPoint);
 
-            Tank.destination = wayPoint;
-            walkable = Tank.CalculatePath(Tank.destination, path);//repath the next waypoint
-        }
+    //        Tank.destination = wayPoint;
+    //        walkable = Tank.CalculatePath(Tank.destination, path);//repath the next waypoint
+    //    }
 
-        trailRenderer.SetPositions(path.corners);
+    //    trailRenderer.SetPositions(path.corners);
 
-        Debug.Log(walkable);
-        Debug.Log(path.status);
-        Debug.Log(wayPoint);
+    //    Debug.Log(walkable);
+    //    Debug.Log(path.status);
+    //    Debug.Log(wayPoint);
         
-    }
+    //}
 
-    private void Patrol()
-    {
+    //private void Patrol()
+    //{
         
-        if (pointChildren.Length == 0)
-            return;
+    //    if (pointChildren.Length == 0)
+    //        return;
 
-        if (destPoint == -1)
-        {
-            Tank.destination = ClosestPatrolPoint();
-        }
-        else
-        {
-            Tank.destination = pointChildren[destPoint].transform.position;
-            destPoint = (destPoint + 1) % pointChildren.Length;
-        }
+    //    if (destPoint == -1)
+    //    {
+    //        Tank.destination = ClosestPatrolPoint();
+    //    }
+    //    else
+    //    {
+    //        Tank.destination = pointChildren[destPoint].transform.position;
+    //        destPoint = (destPoint + 1) % pointChildren.Length;
+    //    }
 
-        Tank.angularSpeed = 200f;
-        //transform.LookAt(Tank.destination);
+    //    Tank.angularSpeed = 200f;
+    //    //transform.LookAt(Tank.destination);
 
-        Debug.Log(pointChildren[2].transform.position.y);
-        Debug.Log("MEMBERS:" + pointChildren.Length);
-    }
+    //    Debug.Log(pointChildren[2].transform.position.y);
+    //    Debug.Log("MEMBERS:" + pointChildren.Length);
+    //}
 
 
-    private Vector3 ClosestPatrolPoint()
-    {
-        float dist = -1;
-        float mindist = 0;
+    //private Vector3 ClosestPatrolPoint()
+    //{
+    //    float dist = -1;
+    //    float mindist = 0;
 
-        Vector3 closest = Vector3.zero;
+    //    Vector3 closest = Vector3.zero;
 
-        for (int i = 0; i < pointChildren.Length; i++)
-        {
+    //    for (int i = 0; i < pointChildren.Length; i++)
+    //    {
                         
-            //First iteration
-            if (dist == -1)
-            {                
-                mindist = dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
-                closest = pointChildren[i].transform.position;
-                destPoint = i;
-            }
-            else
-            {
-                dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
+    //        //First iteration
+    //        if (dist == -1)
+    //        {                
+    //            mindist = dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
+    //            closest = pointChildren[i].transform.position;
+    //            destPoint = i;
+    //        }
+    //        else
+    //        {
+    //            dist = Vector3.Distance(pointChildren[i].transform.position, gameObject.transform.position);
 
-                if (dist < mindist)
-                {
-                    mindist = dist;
-                    closest = pointChildren[i].transform.position;
-                    destPoint = i;
-                }
-            } 
-        }
+    //            if (dist < mindist)
+    //            {
+    //                mindist = dist;
+    //                closest = pointChildren[i].transform.position;
+    //                destPoint = i;
+    //            }
+    //        } 
+    //    }
 
-        return closest;
-    }
+    //    return closest;
+    //}
 
-    private void GotoBases()
-    {
-        if (basesChildren.Length == 0)
-            return;
-        //we are now making paired tanks go to a base and unpaired ones go to the other
-        if(m_PlayerNumber % 2 == 0)
-            Tank.destination = basesChildren[0].transform.position;
-        else
-            Tank.destination = basesChildren[1].transform.position;
+    //private void GotoBases()
+    //{
+    //    if (basesChildren.Length == 0)
+    //        return;
+    //    //we are now making paired tanks go to a base and unpaired ones go to the other
+    //    if(m_PlayerNumber % 2 == 0)
+    //        Tank.destination = basesChildren[0].transform.position;
+    //    else
+    //        Tank.destination = basesChildren[1].transform.position;
 
 
-    }
+    //}
 
 }
